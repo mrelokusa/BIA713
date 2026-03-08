@@ -1,0 +1,10 @@
+# R scripts (appendix only needed as PDF separately)
+section_a.R
+section_b.R
+section_c.R
+# Raw output PNGs (embedded in HTML already)
+output/
+# Raw data
+*.csv
+# Markdown draft
+*.md
