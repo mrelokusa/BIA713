@@ -216,7 +216,7 @@
 
   <div class="question">
     <h3>Question 1.3 - 25% Random Sample [3]</h3>
-    <p>I used <code>set.seed(4346549)</code> and <code>sample()</code> in R to draw a 25% random sample of <strong>250 observations</strong> from the population of 1 000 students. The sample was saved to the Desktop with <code>write.csv()</code>.</p>
+    <p>Using <code>set.seed(4346549)</code> and <code>sample()</code> in R, a 25% random sample of <strong>250 observations</strong> was drawn from the population of 1 000 students. The sample was saved to the Desktop with <code>write.csv()</code>.</p>
     <pre>set.seed(4346549)
 sample_sp &lt;- sp[sample(nrow(sp), 250), ]
 write.csv(sample_sp, '~/Desktop/BIA713_assignment1_sample_A.csv', row.names=FALSE)</pre>
@@ -338,7 +338,7 @@ write.csv(sample_sp, '~/Desktop/BIA713_assignment1_sample_A.csv', row.names=FALS
 
   <div class="question">
     <h3>Question 1.3 - Stratified Random Sample [6]</h3>
-    <p>The population (n = 504) was split by province into 240 WC households and 264 EC households. Using <code>set.seed(4346549)</code>, I drew 24 observations from WC and 26 from EC, then combined them into a single sample of <strong>50 observations</strong>.</p>
+    <p>The population (n = 504) was split by province into 240 WC households and 264 EC households. Using <code>set.seed(4346549)</code>, 24 observations were drawn from WC and 26 from EC, then combined into a single sample of <strong>50 observations</strong>.</p>
     <pre>set.seed(4346549)
 wc_pop    &lt;- hh[hh$PROVINCE == "WC", ]
 ec_pop    &lt;- hh[hh$PROVINCE == "EC", ]
