@@ -20,6 +20,29 @@
   }
 
   /* Title block */
+  .navbar {
+    background: #1a3a5c;
+    padding: 10px 48px;
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .navbar a {
+    color: rgba(255,255,255,0.75);
+    text-decoration: none;
+    font-family: 'Calibri', Arial, sans-serif;
+    font-size: 10.5pt;
+    padding: 4px 0;
+    border-bottom: 2px solid transparent;
+  }
+  .navbar a:hover { color: white; border-bottom-color: white; }
+  .navbar a.active { color: white; border-bottom-color: #89CFF0; }
+  .navbar .brand { color: white; font-weight: 700; font-family: 'Calibri', Arial, sans-serif; font-size: 10.5pt; }
+  .navbar .spacer { flex: 1; }
+  @media print { .navbar { display: none; } }
   .title-block {
     text-align: center;
     border-bottom: 2px solid #1a3a5c;
@@ -100,6 +123,12 @@
 </style>
 </head>
 <body>
+<nav class="navbar">
+  <span class="brand">BIA713 | 4346549</span>
+  <span class="spacer"></span>
+  <a href="index.html">Report</a>
+  <a href="appendix.html" class="active">R Code Appendix</a>
+</nav>
 <div class="page">
 
   <!-- Title -->
