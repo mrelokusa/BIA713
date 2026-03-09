@@ -170,12 +170,23 @@
   @media print {
     body { background: white; font-size: 10.5pt; }
     .page { padding: 0; max-width: 100%; }
-    .title-page { break-after: page; }
-    .toc { break-after: page; }
-    .section-header { break-before: page; }
-    pre { white-space: pre-wrap; word-break: break-word; }
+    .title-page {
+      page-break-after: always;
+      -webkit-page-break-after: always;
+      break-after: page;
+    }
+    .toc {
+      page-break-after: always;
+      -webkit-page-break-after: always;
+      break-after: page;
+    }
+    #secA, #secB, #secC {
+      page-break-before: always;
+      -webkit-page-break-before: always;
+      break-before: page;
+    }
+    pre { white-space: pre-wrap; word-break: break-word; font-size: 8.5pt; }
     figure img { max-height: 340px; width: auto; }
-    pre { font-size: 8.5pt; }
   }
 </style>
 </head>
