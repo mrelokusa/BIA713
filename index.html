@@ -135,6 +135,7 @@
     .title-page { break-after: page; }
     .toc { break-after: page; }
     .section-header { break-before: page; }
+    pre { white-space: pre-wrap; word-break: break-word; }
     figure img { max-height: 340px; width: auto; }
     pre { font-size: 8.5pt; }
   }
@@ -160,6 +161,7 @@
     <li><a href="#secA">Section A - Student Performance [32 marks]</a></li>
     <li><a href="#secB">Section B - Household Income and Expenditure [68 marks]</a></li>
     <li><a href="#secC">Section C - Employee Retention [50 marks]</a></li>
+    <li><a href="#appendix">Appendix - R Code</a></li>
   </ol>
 </div>
 
@@ -631,6 +633,291 @@ hh_sample &lt;- rbind(wc_sample, ec_sample)</pre>
 
 </div>
 </div>
+
+<div id="appendix">
+<div class="section-header">
+  <h2>Appendix - R Code</h2>
+  <div class="marks">All analyses performed in R | Font: 10pt Courier New</div>
+</div>
+<div class="section-body" style="font-family:'Courier New',Courier,monospace;font-size:10pt;">
+
+  <div class="question">
+    <h3 style="font-family:'Calibri',Arial,sans-serif;">Section A - Student Performance</h3>
+
+    <h4 style="font-family:'Calibri',Arial,sans-serif;">Setup</h4>
+    <pre>library(e1071)
+sp &lt;- read.csv('StudentPerformance.csv')</pre>
+
+    <h4 style="font-family:'Calibri',Arial,sans-serif;">Question 1.3 - 25% Random Sample</h4>
+    <pre># Set seed using student number, draw 25% sample (n = 250)
+set.seed(4346549)
+sample_size &lt;- round(nrow(sp) * 0.25)
+sample_sp   &lt;- sp[sample(nrow(sp), sample_size), ]
+
+# Save sample to Desktop
+write.csv(sample_sp, '~/Desktop/BIA713_assignment1_sample_A.csv', row.names = FALSE)</pre>
+
+    <h4 style="font-family:'Calibri',Arial,sans-serif;">Question 1.4 - Categorical Variable Exploration</h4>
+    <pre># Gender - frequency table and bar chart
+gender_freq &lt;- table(sample_sp$Gender)
+gender_pct  &lt;- prop.table(gender_freq) * 100
+print(gender_freq)
+print(round(gender_pct, 2))
+
+barplot(gender_freq,
+        main = "Gender Distribution (Sample n = 250)",
+        xlab = "Gender", ylab = "Frequency",
+        col  = c("#F4A7B9", "#89CFF0"), border = "white",
+        ylim = c(0, max(gender_freq) * 1.2))
+
+# Test preparation course - frequency table and bar chart
+prep_freq &lt;- table(sample_sp$Test_preparation_course)
+prep_pct  &lt;- prop.table(prep_freq) * 100
+print(prep_freq); print(round(prep_pct, 2))
+
+barplot(prep_freq,
+        main = "Test Preparation Course (Sample n = 250)",
+        xlab = "Test Preparation", ylab = "Frequency",
+        col  = c("#A8D5A2", "#FFD580"), border = "white",
+        ylim = c(0, max(prep_freq) * 1.2))
+
+# Mean Math_score by test prep and gender
+tapply(sample_sp$Math_score, sample_sp$Test_preparation_course, mean)
+tapply(sample_sp$Math_score, sample_sp$Gender, mean)</pre>
+
+    <h4 style="font-family:'Calibri',Arial,sans-serif;">Question 1.5 - Numerical Descriptive Statistics</h4>
+    <pre>get_mode &lt;- function(x) {
+  ux &lt;- unique(x)
+  ux[which.max(tabulate(match(x, ux)))]
+}
+
+num_vars &lt;- c("Math_score", "Reading_score", "Writing_score")
+
+for (v in num_vars) {
+  x &lt;- sample_sp[[v]]
+  cat(v, "\n")
+  cat("Min:", min(x), "| Max:", max(x), "| Mean:", round(mean(x), 2),
+      "| Median:", median(x), "| Mode:", get_mode(x), "\n")
+  cat("SD:", round(sd(x), 2), "| CV:", round((sd(x) / mean(x)) * 100, 2), "%\n")
+  cat("Q1:", quantile(x, 0.25), "| Q3:", quantile(x, 0.75),
+      "| Skewness:", round(skewness(x), 4), "\n\n")
+  par(mfrow = c(1, 2))
+  hist(x, main = paste("Histogram of", v), xlab = v,
+       col = "#89CFF0", border = "white", breaks = 12)
+  abline(v = mean(x), col = "red", lwd = 2, lty = 2)
+  boxplot(x, main = paste("Boxplot of", v), ylab = v,
+          col = "#89CFF0", border = "navy")
+  par(mfrow = c(1, 1))
+}</pre>
+  </div>
+
+  <div class="question">
+    <h3 style="font-family:'Calibri',Arial,sans-serif;">Section B - Household Income and Expenditure</h3>
+
+    <h4 style="font-family:'Calibri',Arial,sans-serif;">Setup</h4>
+    <pre>hh &lt;- read.csv('Household.csv')</pre>
+
+    <h4 style="font-family:'Calibri',Arial,sans-serif;">Question 1.3 - Stratified Random Sample</h4>
+    <pre>wc_pop &lt;- hh[hh$PROVINCE == "WC", ]
+ec_pop &lt;- hh[hh$PROVINCE == "EC", ]
+
+set.seed(4346549)
+wc_sample &lt;- wc_pop[sample(nrow(wc_pop), 24), ]
+ec_sample &lt;- ec_pop[sample(nrow(ec_pop), 26), ]
+hh_sample &lt;- rbind(wc_sample, ec_sample)</pre>
+
+    <h4 style="font-family:'Calibri',Arial,sans-serif;">Question 2.1 - Frequency Tables for HEADINC</h4>
+    <pre>make_freq_table &lt;- function(data) {
+  x      &lt;- data$HEADINC
+  k      &lt;- ceiling(1 + 3.322 * log10(length(x)))
+  breaks &lt;- pretty(x, n = k)
+  cuts   &lt;- cut(x, breaks = breaks, include.lowest = TRUE, right = FALSE)
+  f      &lt;- table(cuts)
+  f_pct  &lt;- round(prop.table(f) * 100, 2)
+  F_cum  &lt;- cumsum(f)
+  F_pct_cum &lt;- round(cumsum(prop.table(f)) * 100, 2)
+  data.frame(Interval = names(f), f = as.integer(f),
+             f_pct = as.numeric(f_pct), F = as.integer(F_cum),
+             F_pct = as.numeric(F_pct_cum))
+}
+
+wc_s &lt;- hh_sample[hh_sample$PROVINCE == "WC", ]
+ec_s &lt;- hh_sample[hh_sample$PROVINCE == "EC", ]
+
+cat("Western Cape\n"); print(make_freq_table(wc_s))
+cat("\nEastern Cape\n"); print(make_freq_table(ec_s))</pre>
+
+    <h4 style="font-family:'Calibri',Arial,sans-serif;">Question 2.2 - Relative Frequency Histograms</h4>
+    <pre>par(mfrow = c(1, 2))
+hist(wc_s$HEADINC, freq = FALSE,
+     breaks = pretty(range(wc_s$HEADINC), n = 8),
+     main = "Western Cape - HEADINC (f%)",
+     xlab = "Monthly Income (R)", ylab = "Relative Frequency",
+     col = "#89CFF0", border = "white")
+hist(ec_s$HEADINC, freq = FALSE,
+     breaks = pretty(range(ec_s$HEADINC), n = 8),
+     main = "Eastern Cape - HEADINC (f%)",
+     xlab = "Monthly Income (R)", ylab = "Relative Frequency",
+     col = "#A8D5A2", border = "white")
+par(mfrow = c(1, 1))</pre>
+
+    <h4 style="font-family:'Calibri',Arial,sans-serif;">Question 2.3 - Boxplots and Numerical Summary</h4>
+    <pre>for (prov in c("WC", "EC")) {
+  x &lt;- hh_sample[hh_sample$PROVINCE == prov, "HEADINC"]
+  cat(prov, "\n")
+  cat("Min:", round(min(x), 2), "| Q1:", round(quantile(x, 0.25), 2),
+      "| Median:", round(median(x), 2), "| Mean:", round(mean(x), 2), "\n")
+  cat("Q3:", round(quantile(x, 0.75), 2), "| Max:", round(max(x), 2),
+      "| SD:", round(sd(x), 2), "| Skewness:", round(skewness(x), 4), "\n\n")
+}
+
+boxplot(HEADINC ~ PROVINCE, data = hh_sample,
+        main = "HEADINC by Province",
+        xlab = "Province", ylab = "Monthly Income (R)",
+        col = c("#A8D5A2", "#89CFF0"), border = "navy",
+        names = c("Eastern Cape", "Western Cape"))</pre>
+
+    <h4 style="font-family:'Calibri',Arial,sans-serif;">Question 3.1 - Two-Way Frequency Tables: Gender by Race</h4>
+    <pre>for (prov in c("WC", "EC")) {
+  d &lt;- hh_sample[hh_sample$PROVINCE == prov, ]
+  cat(ifelse(prov == "WC", "Western Cape", "Eastern Cape"), "\n")
+  print(addmargins(table(Gender = d$GENDER, Race = d$RACE)))
+  cat("\n")
+}</pre>
+
+    <h4 style="font-family:'Calibri',Arial,sans-serif;">Question 3.2 - Gender-by-Race Bar Charts</h4>
+    <pre>par(mfrow = c(1, 2))
+for (prov in c("WC", "EC")) {
+  pname &lt;- ifelse(prov == "WC", "Western Cape", "Eastern Cape")
+  d     &lt;- hh_sample[hh_sample$PROVINCE == prov, ]
+  tbl   &lt;- table(Race = d$RACE, Gender = d$GENDER)
+  barplot(tbl, beside = TRUE,
+          main = paste(pname, "- Gender by Race"),
+          xlab = "Gender", ylab = "Frequency",
+          col  = c("#FFD580", "#F4A7B9", "#89CFF0", "#A8D5A2"),
+          legend.text = paste("Race", rownames(tbl)),
+          args.legend = list(x = "topright", cex = 0.8),
+          border = "white")
+}
+par(mfrow = c(1, 1))</pre>
+
+    <h4 style="font-family:'Calibri',Arial,sans-serif;">Question 3.3 - Two-Way Relative Frequency Tables: Gender by Education</h4>
+    <pre>for (prov in c("WC", "EC")) {
+  d   &lt;- hh_sample[hh_sample$PROVINCE == prov, ]
+  tbl &lt;- table(Gender = d$GENDER, Educ = d$EDUC_CAT)
+  cat(ifelse(prov == "WC", "Western Cape", "Eastern Cape"), "\n")
+  print(addmargins(round(prop.table(tbl) * 100, 2)))
+  cat("\n")
+}
+
+# Mean HEADINC by education level per province
+cat("WC - Mean HEADINC by EDUC_CAT:\n")
+print(round(tapply(wc_s$HEADINC, wc_s$EDUC_CAT, mean), 2))
+cat("\nEC - Mean HEADINC by EDUC_CAT:\n")
+print(round(tapply(ec_s$HEADINC, ec_s$EDUC_CAT, mean), 2))</pre>
+
+    <h4 style="font-family:'Calibri',Arial,sans-serif;">Question 3.4 - Gender-by-Education Bar Charts</h4>
+    <pre>par(mfrow = c(1, 2))
+educ_labels &lt;- c("1=None", "2=Gr1-6", "3=Gr7", "4=Gr8-9",
+                  "5=Gr10-11", "6=Gr12", "7=Post-12")
+
+for (prov in c("WC", "EC")) {
+  pname &lt;- ifelse(prov == "WC", "Western Cape", "Eastern Cape")
+  d     &lt;- hh_sample[hh_sample$PROVINCE == prov, ]
+  tbl   &lt;- table(Educ = d$EDUC_CAT, Gender = d$GENDER)
+  cols  &lt;- colorRampPalette(c("#89CFF0", "#F4A7B9", "#A8D5A2",
+                               "#FFD580", "#DDA0DD", "#FFB347",
+                               "#90EE90"))(nrow(tbl))
+  barplot(tbl, beside = TRUE,
+          main = paste(pname, "- Gender by Education"),
+          xlab = "Gender", ylab = "Count", col = cols,
+          legend.text = educ_labels[1:nrow(tbl)],
+          args.legend = list(x = "topright", cex = 0.7),
+          border = "white")
+}
+par(mfrow = c(1, 1))</pre>
+  </div>
+
+  <div class="question">
+    <h3 style="font-family:'Calibri',Arial,sans-serif;">Section C - Employee Retention</h3>
+
+    <h4 style="font-family:'Calibri',Arial,sans-serif;">Setup</h4>
+    <pre>er &lt;- read.csv('Employee_Retension.csv')
+er$left_label  &lt;- ifelse(er$left == 1, "Left", "Stayed")
+er$promo_label &lt;- ifelse(er$promotion_last_5years == 1, "Promoted", "Not Promoted")</pre>
+
+    <h4 style="font-family:'Calibri',Arial,sans-serif;">Step 3 - Contingency Table: Left by Promotion</h4>
+    <pre>tbl3 &lt;- table(Left = er$left_label, Promoted = er$promo_label)
+print(addmargins(tbl3))
+print(round(prop.table(tbl3, margin = 2) * 100, 2))
+
+tbl3_plot &lt;- table(Promoted = er$promo_label, Left = er$left_label)
+barplot(tbl3_plot, beside = TRUE,
+        main = "Employee Leaving by Promotion Status",
+        xlab = "Employment Status", ylab = "Number of Employees",
+        col  = c("#A8D5A2", "#F4A7B9"),
+        legend.text = c("Not Promoted", "Promoted"),
+        args.legend = list(x = "topright"), border = "white")</pre>
+
+    <h4 style="font-family:'Calibri',Arial,sans-serif;">Step 4 - Employees Who Left Without Promotion</h4>
+    <pre>left_no_promo &lt;- tbl3["Left", "Not Promoted"]
+cat("Employees who left without promotion:", left_no_promo, "\n")</pre>
+
+    <h4 style="font-family:'Calibri',Arial,sans-serif;">Step 5 - Retention Rate Among Promoted Employees</h4>
+    <pre>stayed_promo &lt;- tbl3["Stayed", "Promoted"]
+total_promo  &lt;- sum(tbl3[, "Promoted"])
+cat("Stayed after promotion:", stayed_promo, "/", total_promo, "\n")
+cat("Retention rate:", round((stayed_promo / total_promo) * 100, 2), "%\n")</pre>
+
+    <h4 style="font-family:'Calibri',Arial,sans-serif;">Step 6 - Left by Years at Company</h4>
+    <pre>tbl6 &lt;- table(Left = er$left_label, Years = er$time_spend_company)
+print(addmargins(tbl6))
+print(round(prop.table(tbl6, margin = 2)["Left", ] * 100, 2))
+
+tbl6_plot &lt;- prop.table(table(Left = er$left_label,
+                               Years = er$time_spend_company),
+                         margin = 2) * 100
+barplot(tbl6_plot,
+        main = "Proportion Leaving by Years at Company",
+        xlab = "Years at Company", ylab = "Percentage (%)",
+        col  = c("#F4A7B9", "#89CFF0"),
+        legend.text = c("Left", "Stayed"),
+        args.legend = list(x = "topright"), border = "white")</pre>
+
+    <h4 style="font-family:'Calibri',Arial,sans-serif;">Step 7 - Ogive: Average Monthly Working Hours</h4>
+    <pre>hrs      &lt;- er$average_montly_hours
+breaks_h &lt;- pretty(hrs, n = 15)
+cuts_h   &lt;- cut(hrs, breaks = breaks_h, include.lowest = TRUE, right = FALSE)
+F_h      &lt;- cumsum(table(cuts_h))
+F_pct_h  &lt;- F_h / length(hrs) * 100
+upper_bounds &lt;- breaks_h[-1]
+
+plot(upper_bounds, F_pct_h, type = "b", pch = 16, col = "navy",
+     main = "Ogive - Average Monthly Working Hours",
+     xlab = "Average Monthly Hours", ylab = "Cumulative Frequency (%)",
+     ylim = c(0, 105), lwd = 2)
+abline(v = 160, col = "red",       lty = 2, lwd = 1.5)
+abline(v = 200, col = "darkgreen", lty = 2, lwd = 1.5)
+
+pct_lt160   &lt;- round(mean(hrs &lt; 160) * 100, 2)
+pct_160_200 &lt;- round(mean(hrs &gt;= 160 &amp; hrs &lt;= 200) * 100, 2)
+pct_gt200   &lt;- round(mean(hrs &gt; 200) * 100, 2)
+cat("Less than 160 hrs:   ", pct_lt160,   "%\n")
+cat("Between 160-200 hrs: ", pct_160_200, "%\n")
+cat("More than 200 hrs:   ", pct_gt200,   "%\n")
+
+# Average hours: left vs stayed
+tapply(er$average_montly_hours, er$left_label, mean)
+tapply(er$average_montly_hours, er$left_label, median)
+
+# Leaving rate by salary level
+tbl_sal &lt;- table(Left = er$left_label, Salary = er$salary)
+print(addmargins(tbl_sal))
+print(round(prop.table(tbl_sal, margin = 2)["Left", ] * 100, 2))</pre>
+  </div>
+
+</div><!-- /section-body -->
+</div><!-- /appendix -->
 
 <footer style="margin-top:60px;padding:24px 0;border-top:2px solid #dde3ea;text-align:center;color:#888;font-size:9.5pt;">
   BIA713 Assignment 1 | Zondi, ENZ | 4346549 | 2026
