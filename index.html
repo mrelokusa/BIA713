@@ -152,9 +152,24 @@
   .navbar .brand { color: white; font-weight: 700; font-family: 'Calibri', Arial, sans-serif; font-size: 10.5pt; }
   .navbar .spacer { flex: 1; }
   @media print { .navbar { display: none; } }
+  @page {
+    margin: 20mm 18mm;
+    @bottom-right {
+      content: "Page " counter(page) " of " counter(pages);
+      font-family: 'Calibri', Arial, sans-serif;
+      font-size: 9pt;
+      color: #888;
+    }
+    @bottom-left {
+      content: "BIA713 Assignment 1 | Zondi, ENZ | 4346549";
+      font-family: 'Calibri', Arial, sans-serif;
+      font-size: 9pt;
+      color: #888;
+    }
+  }
   @media print {
     body { background: white; font-size: 10.5pt; }
-    .page { padding: 20px 28px; max-width: 100%; }
+    .page { padding: 0; max-width: 100%; }
     .title-page { break-after: page; }
     .toc { break-after: page; }
     .section-header { break-before: page; }

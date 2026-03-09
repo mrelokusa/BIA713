@@ -43,6 +43,21 @@
   .navbar .brand { color: white; font-weight: 700; font-family: 'Calibri', Arial, sans-serif; font-size: 10.5pt; }
   .navbar .spacer { flex: 1; }
   @media print { .navbar { display: none; } }
+  @page {
+    margin: 20mm 18mm;
+    @bottom-right {
+      content: "Page " counter(page) " of " counter(pages);
+      font-family: 'Calibri', Arial, sans-serif;
+      font-size: 9pt;
+      color: #888;
+    }
+    @bottom-left {
+      content: "BIA713 Assignment 1 - Code Appendix | 4346549";
+      font-family: 'Calibri', Arial, sans-serif;
+      font-size: 9pt;
+      color: #888;
+    }
+  }
   .title-block {
     text-align: center;
     border-bottom: 2px solid #1a3a5c;
