@@ -1,0 +1,168 @@
+BIA713 Assignment 3 Results
+===========================
+
+SECTION A
+---------
+Male sample:   n=116, mean=69.2069, variance=187.9568, sd=13.7097
+Female sample: n=134, mean=63.9179, variance=237.5346, sd=15.4122
+Difference (female - male) = -5.2890
+
+F test for equality of variances:
+
+	F test to compare two variances
+
+data:  male_math and female_math
+F = 0.79128, num df = 115, denom df = 133, p-value = 0.1978
+alternative hypothesis: true ratio of variances is not equal to 1
+95 percent confidence interval:
+ 0.556335 1.130661
+sample estimates:
+ratio of variances 
+          0.791282 
+
+
+Two-sample t test for mean difference (female - male):
+
+	Two Sample t-test
+
+data:  female_math and male_math
+t = -2.8472, df = 248, p-value = 0.004779
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -8.947632 -1.630340
+sample estimates:
+mean of x mean of y 
+ 63.91791  69.20690 
+
+
+
+null device 
+          1 
+SECTION B
+---------
+WC population: n=240, mean=21140.5040, variance=5355263.0709, sd=2314.1441, IQR=2628.2050, range=14994.0500
+EC population: n=264, mean=20153.8344, variance=8709900.7099, sd=2951.2541, IQR=3162.5800, range=17311.9900
+Variance ratio (WC / EC) = 0.6148
+
+WC sample: n=24, mean=21309.8604, variance=4694265.6777, sd=2166.6254
+EC sample: n=26, mean=20688.0523, variance=10510391.6088, sd=3241.9734
+
+Welch t interval for mean difference (WC - EC):
+
+	Welch Two Sample t-test
+
+data:  wc_sample$HEADINC and ec_sample$HEADINC
+t = 0.80286, df = 43.879, p-value = 0.4264
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -939.2023 2182.8185
+sample estimates:
+mean of x mean of y 
+ 21309.86  20688.05 
+
+
+One-sided Welch t test for WC > EC:
+
+	Welch Two Sample t-test
+
+data:  wc_sample$HEADINC and ec_sample$HEADINC
+t = 0.80286, df = 43.879, p-value = 0.2132
+alternative hypothesis: true difference in means is greater than 0
+95 percent confidence interval:
+ -679.5961       Inf
+sample estimates:
+mean of x mean of y 
+ 21309.86  20688.05 
+
+
+
+null device 
+          1 
+null device 
+          1 
+SECTION C
+---------
+Population stayed group: n=11428, mean=3.3800, variance=2.4409, sd=1.5623
+Population left group:   n=3571, mean=3.8765, variance=0.9559, sd=0.9777
+
+F test for equality of variances (population groups):
+
+	F test to compare two variances
+
+data:  years_stayed_pop and years_left_pop
+F = 2.5536, num df = 11427, denom df = 3570, p-value < 2.2e-16
+alternative hypothesis: true ratio of variances is not equal to 1
+95 percent confidence interval:
+ 2.42047 2.69195
+sample estimates:
+ratio of variances 
+          2.553561 
+
+
+Employee sample size = 3750
+Sample stayed group: n=2802, mean=3.4029, variance=2.4799, sd=1.5748
+Sample left group:   n=948, mean=3.8502, variance=0.9342, sd=0.9666
+
+Welch t test for mean difference in time spent (stayed - left):
+
+	Welch Two Sample t-test
+
+data:  years_stayed_sample and years_left_sample
+t = -10.342, df = 2680.7, p-value < 2.2e-16
+alternative hypothesis: true difference in means is not equal to 0
+99 percent confidence interval:
+ -0.5587673 -0.3358017
+sample estimates:
+mean of x mean of y 
+ 3.402926  3.850211 
+
+
+ANOVA table:
+              Df Sum Sq Mean Sq F value   Pr(>F)    
+left_group     1    142  141.71   67.83 2.44e-16 ***
+Residuals   3748   7831    2.09                     
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Population contingency table: left by promotion
+        Promotion
+Left     Not promoted Promoted   Sum
+  Stayed        11128      300 11428
+  Left           3552       19  3571
+  Sum           14680      319 14999
+
+Expected counts for full-data chi-square test:
+        Promotion
+Left     Not promoted Promoted
+  Stayed    11184.948 243.0517
+  Left       3495.052  75.9483
+
+Full-data chi-square test:
+
+	Pearson's Chi-squared test with Yates' continuity correction
+
+data:  promo_pop_table
+X-squared = 56.262, df = 1, p-value = 6.344e-14
+
+
+Sample contingency table: left by promotion
+        Promotion
+Left     Not promoted Promoted  Sum
+  Stayed         2719       83 2802
+  Left            943        5  948
+  Sum            3662       88 3750
+
+Expected counts for sample chi-square test:
+        Promotion
+Left     Not promoted Promoted
+  Stayed    2736.2464  65.7536
+  Left       925.7536  22.2464
+
+Sample chi-square test:
+
+	Pearson's Chi-squared test with Yates' continuity correction
+
+data:  promo_sample_table
+X-squared = 17.277, df = 1, p-value = 3.231e-05
+
+

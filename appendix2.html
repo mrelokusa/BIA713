@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BIA713 Assignment 2 – R Code Appendix | 4346549</title>
+<style>
+  :root { --accent:#1a3a5c; --accent2:#2e6da4; --bg:#f9f9f9; --card:#fff; --border:#dde3ea; --text:#1e1e1e; --muted:#555; --code-bg:#f0f4f8; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:'Calibri','Segoe UI',Arial,sans-serif; font-size:11pt; background:var(--bg); color:var(--text); line-height:1.7; }
+  .page { max-width:960px; margin:0 auto; padding:40px 48px; }
+  .title-page { text-align:center; padding:60px 0 40px; border-bottom:3px solid var(--accent); margin-bottom:40px; }
+  .title-page h1 { font-size:22pt; color:var(--accent); margin-bottom:8px; }
+  .title-page h2 { font-size:14pt; font-weight:400; color:var(--muted); margin-bottom:24px; }
+  .title-meta { display:inline-block; background:var(--accent); color:white; border-radius:8px; padding:16px 36px; line-height:2; font-size:11pt; }
+  .title-meta strong { font-size:13pt; }
+  .section-header { background:var(--accent); color:white; padding:12px 22px; border-radius:8px 8px 0 0; margin-top:40px; }
+  .section-header h2 { font-size:13pt; margin:0; }
+  .section-body { background:var(--card); border:1px solid var(--border); border-top:none; border-radius:0 0 8px 8px; padding:24px 28px; }
+  pre { background:var(--code-bg); border:1px solid var(--border); border-radius:6px; padding:16px 20px; font-family:'Courier New',monospace; font-size:10pt; overflow-x:auto; line-height:1.5; white-space:pre; }
+  .navbar { background:#1a3a5c; padding:10px 48px; display:flex; gap:18px; align-items:center; position:sticky; top:0; z-index:100; flex-wrap:wrap; }
+  .navbar a { color:rgba(255,255,255,0.75); text-decoration:none; font-family:'Calibri',Arial,sans-serif; font-size:10.5pt; padding:4px 0; border-bottom:2px solid transparent; }
+  .navbar a:hover { color:white; border-bottom-color:white; }
+  .navbar a.active { color:white; border-bottom-color:#89CFF0; }
+  .navbar .brand { color:white; font-weight:700; font-family:'Calibri',Arial,sans-serif; font-size:10.5pt; }
+  .navbar .spacer { flex:1; }
+  @media print { .navbar { display:none; } pre { font-size:8pt; line-height:1.3; } }
+</style>
+</head>
+<body>
+<nav class="navbar">
+  <span class="brand">BIA713 | 4346549</span>
+  <span class="spacer"></span>
+  <a href="index.html">Assignment 1 Report</a>
+  <a href="assignment2.html">Assignment 2 Report</a>
+  <a href="assignment3.html">Assignment 3 Report</a>
+  <a href="appendix.html">A1 R Code</a>
+  <a href="appendix2.html" class="active">A2 R Code</a>
+  <a href="appendix3.html">A3 R Code</a>
+</nav>
+<div class="page">
+
+<div class="title-page">
+  <h1>BIA713 &#8211; Statistics and Visualization</h1>
+  <h2>Assignment 2 | R Code Appendix</h2>
+  <div class="title-meta">
+    <strong>Zondi, ENZ</strong><br>
+    Student Number: 4346549<br>
+    File: BIA713_assignment2_code_4346549
+  </div>
+</div>
+
+<div class="section-header"><h2>assignment2.R &#8211; Full Analysis Script</h2></div>
+<div class="section-body">
+  <pre>library(e1071)
+
+setwd('/Users/elokusa/Desktop/4346549_BIA713')
+
+# ── QUESTION 1 ────────────────────────────────────────────────────────────────
+# Recreate Assignment 1 Section A sample (set.seed matches section_a.R)
+sp &lt;- read.csv('StudentPerformance.csv')
+set.seed(4346549)
+sample_sp &lt;- sp[sample(nrow(sp), 250), ]
+
+male_math   &lt;- sample_sp$Math_score[sample_sp$Gender == "male"]
+female_math &lt;- sample_sp$Math_score[sample_sp$Gender == "female"]
+
+# Q1.1 – Histogram and QQ plot for each gender group
+png('output/A2_Q1.1_male.png', width=900, height=450)
+par(mfrow=c(1,2), mar=c(4,4,3,1))
+hist(male_math, main="Male Math Scores - Histogram", xlab="Math Score",
+     col="#89CFF0", border="white", breaks=12)
+abline(v=mean(male_math), col="red", lwd=2, lty=2)
+legend("topright", legend="Mean", col="red", lty=2, lwd=2, cex=0.9)
+qqnorm(male_math, main="Male Math Scores - QQ Plot",
+       pch=16, col="navy", cex=0.7)
+qqline(male_math, col="red", lwd=2)
+dev.off()
+
+png('output/A2_Q1.1_female.png', width=900, height=450)
+par(mfrow=c(1,2), mar=c(4,4,3,1))
+hist(female_math, main="Female Math Scores - Histogram", xlab="Math Score",
+     col="#F4A7B9", border="white", breaks=12)
+abline(v=mean(female_math), col="darkred", lwd=2, lty=2)
+legend("topright", legend="Mean", col="darkred", lty=2, lwd=2, cex=0.9)
+qqnorm(female_math, main="Female Math Scores - QQ Plot",
+       pch=16, col="darkred", cex=0.7)
+qqline(female_math, col="red", lwd=2)
+dev.off()
+
+# Shapiro-Wilk normality test and shape measures
+sw_male   &lt;- shapiro.test(male_math)
+sw_female &lt;- shapiro.test(female_math)
+
+cat(sprintf("Male   Shapiro-Wilk: W=%.4f, p=%.4f
+", sw_male$statistic,   sw_male$p.value))
+cat(sprintf("Female Shapiro-Wilk: W=%.4f, p=%.4f
+", sw_female$statistic, sw_female$p.value))
+cat(sprintf("Male   skewness=%.4f, kurtosis=%.4f
+", skewness(male_math),   kurtosis(male_math)))
+cat(sprintf("Female skewness=%.4f, kurtosis=%.4f
+", skewness(female_math), kurtosis(female_math)))
+
+# Q1.2 – Side-by-side boxplots and 1.5*IQR outlier detection
+png('output/A2_Q1.2_boxplots.png', width=700, height=520)
+par(mar=c(5,5,4,2))
+boxplot(list(Male=male_math, Female=female_math),
+        main="Math Score Distribution by Gender",
+        ylab="Math Score (out of 100)",
+        col=c("#89CFF0","#F4A7B9"), border="navy",
+        notch=FALSE, outline=TRUE)
+dev.off()
+
+for (grp in list(Male=male_math, Female=female_math)) {
+  nm  &lt;- names(which(sapply(list(Male=male_math, Female=female_math), identical, grp)))
+  q1  &lt;- quantile(grp, 0.25); q3 &lt;- quantile(grp, 0.75); iqr &lt;- q3 - q1
+  lo  &lt;- q1 - 1.5*iqr;  hi &lt;- q3 + 1.5*iqr
+  out &lt;- grp[grp &lt; lo | grp &gt; hi]
+  cat(sprintf("%s: n=%d, Min=%.0f, Q1=%.2f, Med=%.0f, Mean=%.2f, Q3=%.0f, Max=%.0f
+",
+              nm, length(grp), min(grp), q1, median(grp), mean(grp), q3, max(grp)))
+  cat(sprintf("       IQR=%.2f, Fences=[%.2f, %.2f], Outliers=%d",
+              iqr, lo, hi, length(out)))
+  if (length(out) &gt; 0) cat(sprintf("  values: %s", paste(sort(out), collapse=", ")))
+  cat("
+")
+}
+
+# ── QUESTION 2 ────────────────────────────────────────────────────────────────
+# Split Household population into WC and EC provincial subsets
+hh     &lt;- read.csv('Household.csv')
+wc_pop &lt;- hh[hh$PROVINCE == "WC", ]
+ec_pop &lt;- hh[hh$PROVINCE == "EC", ]
+
+# Q2.1 – Histogram and QQ plot to assess normality of HEADINC graphically
+png('output/A2_Q2.1_WC.png', width=900, height=450)
+par(mfrow=c(1,2), mar=c(4,4,3,1))
+hist(wc_pop$HEADINC, main="WC HEADINC - Histogram",
+     xlab="Monthly Income (R)", col="#89CFF0", border="white", breaks=20)
+abline(v=mean(wc_pop$HEADINC), col="red", lwd=2, lty=2)
+legend("topright", legend="Mean", col="red", lty=2, lwd=2, cex=0.9)
+qqnorm(wc_pop$HEADINC, main="WC HEADINC - QQ Plot",
+       pch=16, col="navy", cex=0.5)
+qqline(wc_pop$HEADINC, col="red", lwd=2)
+dev.off()
+
+png('output/A2_Q2.1_EC.png', width=900, height=450)
+par(mfrow=c(1,2), mar=c(4,4,3,1))
+hist(ec_pop$HEADINC, main="EC HEADINC - Histogram",
+     xlab="Monthly Income (R)", col="#A8D5A2", border="white", breaks=20)
+abline(v=mean(ec_pop$HEADINC), col="red", lwd=2, lty=2)
+legend("topright", legend="Mean", col="red", lty=2, lwd=2, cex=0.9)
+qqnorm(ec_pop$HEADINC, main="EC HEADINC - QQ Plot",
+       pch=16, col="darkgreen", cex=0.5)
+qqline(ec_pop$HEADINC, col="red", lwd=2)
+dev.off()
+
+# Q2.2 – Numerical normality measures (mean, median, SD, skewness, kurtosis, Shapiro-Wilk)
+# Shapiro-Wilk is limited to n &lt;= 5000; populations here are within that limit
+for (pv in c("WC","EC")) {
+  pop   &lt;- hh[hh$PROVINCE == pv, "HEADINC"]
+  pname &lt;- ifelse(pv=="WC","Western Cape","Eastern Cape")
+  cat(sprintf("
+%s (n=%d)
+", pname, length(pop)))
+  cat(sprintf("  Mean:     R%10.2f
+", mean(pop)))
+  cat(sprintf("  Median:   R%10.2f
+", median(pop)))
+  cat(sprintf("  SD:       R%10.2f
+", sd(pop)))
+  cat(sprintf("  Skewness: %10.4f
+",  skewness(pop)))
+  cat(sprintf("  Kurtosis: %10.4f
+",  kurtosis(pop)))
+  set.seed(1)
+  sw_x &lt;- if (length(pop) &gt; 5000) sample(pop, 5000) else pop
+  sw   &lt;- shapiro.test(sw_x)
+  cat(sprintf("  Shapiro-Wilk (n=%d): W=%.4f, p=%.4e
+", length(sw_x), sw$statistic, sw$p.value))
+}
+
+# Q2.4 / Q2.5 – Normal probability calculations using population mu and sigma
+for (pv in c("WC","EC")) {
+  pop   &lt;- hh[hh$PROVINCE == pv, "HEADINC"]
+  mu    &lt;- mean(pop); sigma &lt;- sd(pop)
+  pname &lt;- ifelse(pv=="WC","Western Cape","Eastern Cape")
+  p1    &lt;- pnorm(20000, mu, sigma)
+  p3    &lt;- pnorm(25000, mu, sigma) - pnorm(20000, mu, sigma)
+  p2    &lt;- 1 - pnorm(25000, mu, sigma)
+  cat(sprintf("
+%s: mu=R%.2f, sigma=R%.2f
+", pname, mu, sigma))
+  cat(sprintf("  P(X &lt; 20000)          = %.4f  (%.2f%%)
+", p1, p1*100))
+  cat(sprintf("  P(X &gt; 25000)          = %.4f  (%.2f%%)
+", p2, p2*100))
+  cat(sprintf("  P(20000 &lt;= X &lt;= 25000) = %.4f  (%.2f%%)
+", p3, p3*100))
+}
+
+# ── QUESTION 3 ────────────────────────────────────────────────────────────────
+er &lt;- read.csv('Employee_Retention.csv')
+
+# Q3.1.1 – Split average_montly_hours by departure status (left=1, stayed=0)
+hrs_left   &lt;- er$average_montly_hours[er$left == 1]
+hrs_stayed &lt;- er$average_montly_hours[er$left == 0]
+
+cat(sprintf("Hours Left   (n=%d): Mean=%.2f, Median=%.2f, SD=%.2f
+",
+            length(hrs_left),   mean(hrs_left),   median(hrs_left),   sd(hrs_left)))
+cat(sprintf("Hours Stayed (n=%d): Mean=%.2f, Median=%.2f, SD=%.2f
+",
+            length(hrs_stayed), mean(hrs_stayed), median(hrs_stayed), sd(hrs_stayed)))
+
+# Q3.1.2 – Normality verification: shape measures and Shapiro-Wilk (sampled at n=5000)
+cat(sprintf("Hours Left:   Skewness=%.4f, Kurtosis=%.4f
+", skewness(hrs_left),   kurtosis(hrs_left)))
+cat(sprintf("Hours Stayed: Skewness=%.4f, Kurtosis=%.4f
+", skewness(hrs_stayed), kurtosis(hrs_stayed)))
+
+set.seed(1)
+sw_hl &lt;- shapiro.test(sample(hrs_left,   min(5000, length(hrs_left))))
+sw_hs &lt;- shapiro.test(sample(hrs_stayed, min(5000, length(hrs_stayed))))
+cat(sprintf("Hours Left   Shapiro-Wilk: W=%.4f, p=%.4e
+", sw_hl$statistic, sw_hl$p.value))
+cat(sprintf("Hours Stayed Shapiro-Wilk: W=%.4f, p=%.4e
+", sw_hs$statistic, sw_hs$p.value))
+
+png('output/A2_Q3.1_hours.png', width=1000, height=500)
+par(mfrow=c(2,2), mar=c(4,4,3,1))
+hist(hrs_left,   main="Monthly Hours - Left (Histogram)",   xlab="Avg Monthly Hours",
+     col="#F4A7B9", border="white", breaks=20)
+abline(v=mean(hrs_left), col="red", lwd=2, lty=2)
+qqnorm(hrs_left,   main="Monthly Hours - Left (QQ Plot)",
+       pch=16, col="darkred", cex=0.5)
+qqline(hrs_left, col="red", lwd=2)
+hist(hrs_stayed, main="Monthly Hours - Stayed (Histogram)", xlab="Avg Monthly Hours",
+     col="#89CFF0", border="white", breaks=20)
+abline(v=mean(hrs_stayed), col="navy", lwd=2, lty=2)
+qqnorm(hrs_stayed, main="Monthly Hours - Stayed (QQ Plot)",
+       pch=16, col="navy", cex=0.5)
+qqline(hrs_stayed, col="red", lwd=2)
+dev.off()
+
+# Q3.2.1 – Split last_evaluation by departure status
+eval_left   &lt;- er$last_evaluation[er$left == 1]
+eval_stayed &lt;- er$last_evaluation[er$left == 0]
+
+cat(sprintf("Eval Left   (n=%d): Mean=%.4f, Median=%.4f, SD=%.4f
+",
+            length(eval_left),   mean(eval_left),   median(eval_left),   sd(eval_left)))
+cat(sprintf("Eval Stayed (n=%d): Mean=%.4f, Median=%.4f, SD=%.4f
+",
+            length(eval_stayed), mean(eval_stayed), median(eval_stayed), sd(eval_stayed)))
+
+# Q3.2.2 – Normality verification: shape measures and Shapiro-Wilk
+cat(sprintf("Eval Left:   Skewness=%.4f, Kurtosis=%.4f
+", skewness(eval_left),   kurtosis(eval_left)))
+cat(sprintf("Eval Stayed: Skewness=%.4f, Kurtosis=%.4f
+", skewness(eval_stayed), kurtosis(eval_stayed)))
+
+set.seed(1)
+sw_el &lt;- shapiro.test(sample(eval_left,   min(5000, length(eval_left))))
+sw_es &lt;- shapiro.test(sample(eval_stayed, min(5000, length(eval_stayed))))
+cat(sprintf("Eval Left   Shapiro-Wilk: W=%.4f, p=%.4e
+", sw_el$statistic, sw_el$p.value))
+cat(sprintf("Eval Stayed Shapiro-Wilk: W=%.4f, p=%.4e
+", sw_es$statistic, sw_es$p.value))
+
+png('output/A2_Q3.2_eval.png', width=1000, height=500)
+par(mfrow=c(2,2), mar=c(4,4,3,1))
+hist(eval_left,   main="Last Evaluation - Left (Histogram)",   xlab="Evaluation Score",
+     col="#F4A7B9", border="white", breaks=20)
+abline(v=mean(eval_left), col="red", lwd=2, lty=2)
+qqnorm(eval_left,   main="Last Evaluation - Left (QQ Plot)",
+       pch=16, col="darkred", cex=0.5)
+qqline(eval_left, col="red", lwd=2)
+hist(eval_stayed, main="Last Evaluation - Stayed (Histogram)", xlab="Evaluation Score",
+     col="#89CFF0", border="white", breaks=20)
+abline(v=mean(eval_stayed), col="navy", lwd=2, lty=2)
+qqnorm(eval_stayed, main="Last Evaluation - Stayed (QQ Plot)",
+       pch=16, col="navy", cex=0.5)
+qqline(eval_stayed, col="red", lwd=2)
+dev.off()
+</pre>
+</div>
+
+</div>
+</body>
+</html>

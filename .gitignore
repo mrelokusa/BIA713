@@ -2,8 +2,12 @@
 section_a.R
 section_b.R
 section_c.R
-# Raw output PNGs (embedded in HTML already)
-output/
+# Raw output PNGs (keep older generated assets ignored, but allow Assignment 3 files)
+output/*
+!output/A3_B1_variance_comparison.png
+!output/A3_C1_time_spend_boxplot.png
+!output/A3_C2_left_promo_sample.png
+!output/assignment3_results.txt
 # Raw data
 *.csv
 # Markdown draft

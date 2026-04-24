@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BIA713 Assignment 3 - 2026 | 4346549</title>
+<style>
+  :root {
+    --accent: #1a3a5c;
+    --accent2: #2e6da4;
+    --bg: #f9f9f9;
+    --card: #ffffff;
+    --border: #dde3ea;
+    --text: #1e1e1e;
+    --muted: #555;
+    --code-bg: #f0f4f8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Calibri', 'Segoe UI', Arial, sans-serif;
+    font-size: 11pt;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+  }
+  .page {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 40px 48px;
+  }
+  .title-page {
+    text-align: center;
+    padding: 80px 0 60px;
+    border-bottom: 3px solid var(--accent);
+    margin-bottom: 48px;
+  }
+  .title-page h1 { font-size: 26pt; color: var(--accent); margin-bottom: 8px; }
+  .title-page h2 { font-size: 16pt; font-weight: 400; color: var(--muted); margin-bottom: 32px; }
+  .title-meta {
+    display: inline-block;
+    background: var(--accent);
+    color: white;
+    border-radius: 8px;
+    padding: 20px 40px;
+    margin-top: 16px;
+    line-height: 2;
+    font-size: 12pt;
+  }
+  .title-meta strong { font-size: 14pt; }
+  .section-header {
+    background: var(--accent);
+    color: white;
+    padding: 14px 24px;
+    border-radius: 8px 8px 0 0;
+    margin-top: 52px;
+  }
+  .section-header h2 { font-size: 15pt; margin: 0; }
+  .section-header .marks { font-size: 10pt; opacity: 0.85; margin-top: 2px; }
+  .section-body {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    padding: 28px 32px;
+    margin-bottom: 8px;
+  }
+  .question {
+    margin-top: 28px;
+    padding-top: 22px;
+    border-top: 1px solid var(--border);
+  }
+  .question:first-child { margin-top: 0; padding-top: 0; border-top: none; }
+  .question h3 { font-size: 12.5pt; color: var(--accent2); margin-bottom: 10px; }
+  .question h4 { font-size: 11pt; color: var(--accent); margin: 16px 0 8px; font-weight: 600; }
+  p { margin-bottom: 10px; }
+  .tbl-wrap { overflow-x: auto; margin: 14px 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 10.3pt; }
+  thead th {
+    background: var(--accent);
+    color: white;
+    padding: 8px 10px;
+    text-align: left;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  tbody tr:nth-child(even) { background: #f0f5fb; }
+  tbody td {
+    padding: 7px 10px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  figure { margin: 16px 0; text-align: center; }
+  figure img {
+    max-width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  }
+  figcaption {
+    font-size: 9.5pt;
+    color: var(--muted);
+    margin-top: 6px;
+    font-style: italic;
+  }
+  .finding {
+    background: #e8f4ea;
+    border-left: 4px solid #3a9e5f;
+    padding: 12px 16px;
+    border-radius: 0 6px 6px 0;
+    margin: 12px 0;
+    font-size: 10.4pt;
+  }
+  .finding strong { color: #1e6e3a; }
+  .warn {
+    background: #fff8e1;
+    border-left: 4px solid #f9a825;
+    padding: 12px 16px;
+    border-radius: 0 6px 6px 0;
+    margin: 12px 0;
+    font-size: 10.4pt;
+  }
+  .warn strong { color: #e65100; }
+  .toc {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px 32px;
+    margin-bottom: 40px;
+  }
+  .toc h3 { color: var(--accent); margin-bottom: 12px; font-size: 13pt; }
+  .toc ol { padding-left: 20px; }
+  .toc li { margin-bottom: 4px; }
+  .toc a { color: var(--accent2); text-decoration: none; }
+  .toc a:hover { text-decoration: underline; }
+  .navbar {
+    background: #1a3a5c;
+    padding: 10px 48px;
+    display: flex;
+    gap: 18px;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    flex-wrap: wrap;
+  }
+  .navbar a {
+    color: rgba(255,255,255,0.75);
+    text-decoration: none;
+    font-family: 'Calibri', Arial, sans-serif;
+    font-size: 10.5pt;
+    padding: 4px 0;
+    border-bottom: 2px solid transparent;
+  }
+  .navbar a:hover { color: white; border-bottom-color: white; }
+  .navbar a.active { color: white; border-bottom-color: #89CFF0; }
+  .navbar .brand { color: white; font-weight: 700; font-family: 'Calibri', Arial, sans-serif; font-size: 10.5pt; }
+  .navbar .spacer { flex: 1; }
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .stat-card {
+    background: #f0f5fb;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 16px;
+  }
+  .stat-card .label {
+    font-size: 9pt;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .stat-card .value { font-size: 13pt; font-weight: 700; color: var(--accent); }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin: 12px 0; }
+  @media (max-width: 680px) { .two-col { grid-template-columns: 1fr; } }
+  @media print { .navbar { display: none; } }
+  @page {
+    margin: 20mm 18mm;
+    @bottom-right {
+      content: "Page " counter(page) " of " counter(pages);
+      font-family: 'Calibri', Arial, sans-serif;
+      font-size: 9pt;
+      color: #888;
+    }
+    @bottom-left {
+      content: "BIA713 Assignment 3 | Zondi, ENZ | 4346549";
+      font-family: 'Calibri', Arial, sans-serif;
+      font-size: 9pt;
+      color: #888;
+    }
+  }
+  @media print {
+    body { background: white; font-size: 8.9pt; line-height: 1.32; }
+    .page { padding: 0; max-width: 100%; }
+    .title-page { padding: 20px 0 12px; margin-bottom: 12px; }
+    .title-page h1 { font-size: 16pt; }
+    .title-page h2 { font-size: 11pt; }
+    .title-meta { padding: 10px 24px; font-size: 10pt; line-height: 1.6; }
+    .toc { padding: 12px 20px; margin-bottom: 0; }
+    .toc h3 { font-size: 10pt; }
+    .toc li { margin-bottom: 2px; font-size: 9.4pt; }
+    #secA, #secB, #secC {
+      page-break-before: always;
+      -webkit-page-break-before: always;
+      break-before: page;
+    }
+    .section-header { padding: 6px 14px; }
+    .section-header h2 { font-size: 11pt; }
+    .section-body { padding: 8px 12px; }
+    .question { margin-top: 6px; padding-top: 6px; }
+    .question h3 { font-size: 9.4pt; margin-bottom: 3px; }
+    .question h4 { font-size: 8.9pt; margin: 4px 0 2px; }
+    p { margin-bottom: 4px; }
+    thead th, tbody td { padding: 4px 6px; font-size: 8.2pt; }
+    figure { margin: 4px 0; display: inline-block; width: 48%; vertical-align: top; }
+    figure img { max-height: 160px; width: 100%; }
+    figcaption { font-size: 7pt; }
+    .finding, .warn { padding: 6px 10px; font-size: 8.8pt; margin: 5px 0; }
+    .stat-grid { grid-template-columns: repeat(4, 1fr); gap: 6px; }
+    .stat-card { padding: 6px 8px; }
+    .stat-card .value { font-size: 9.8pt; }
+  }
+</style>
+</head>
+<body>
+<nav class="navbar">
+  <span class="brand">BIA713 | 4346549</span>
+  <span class="spacer"></span>
+  <a href="index.html">Assignment 1 Report</a>
+  <a href="assignment2.html">Assignment 2 Report</a>
+  <a href="assignment3.html" class="active">Assignment 3 Report</a>
+  <a href="appendix.html">A1 R Code</a>
+  <a href="appendix2.html">A2 R Code</a>
+  <a href="appendix3.html">A3 R Code</a>
+</nav>
+<div class="page">
+
+<div class="title-page">
+  <h1>BIA713 - Statistics and Visualization</h1>
+  <h2>Assignment 3 | 2026</h2>
+  <div class="title-meta">
+    <strong>Zondi, ENZ</strong><br>
+    Student Number: 4346549<br>
+    Due: Sunday 24 April 2026 at 23:45<br>
+    Total: 70 Marks
+  </div>
+</div>
+
+<div class="toc">
+  <h3>Table of Contents</h3>
+  <ol>
+    <li><a href="#secA">Section A - Difference in mathematics scores by gender [18 marks]</a></li>
+    <li><a href="#secB">Section B - Income variance and mean comparison (WC vs EC) [24 marks]</a></li>
+    <li><a href="#secC">Section C - Employee tenure and promotion inference [28 marks]</a></li>
+  </ol>
+</div>
+
+<div id="secA">
+<div class="section-header">
+  <h2>Section A - Student Performance</h2>
+  <div class="marks">Dataset: StudentPerformance.csv | Assignment 1 sample reused (n = 250) | Male = 116 | Female = 134</div>
+</div>
+<div class="section-body">
+
+  <div class="stat-grid">
+    <div class="stat-card"><div class="label">Male mean</div><div class="value">69.21</div></div>
+    <div class="stat-card"><div class="label">Female mean</div><div class="value">63.92</div></div>
+    <div class="stat-card"><div class="label">Male variance</div><div class="value">187.96</div></div>
+    <div class="stat-card"><div class="label">Female variance</div><div class="value">237.53</div></div>
+  </div>
+
+  <div class="question">
+    <h3>Question 1.1 - What is being estimated through statistical inference? [5]</h3>
+    <p>Statistical inference uses sample information to learn about an unknown population value. In this question the parameter of interest is the difference between the population mean mathematics scores of female and male students, written as <strong>&mu;<sub>F</sub> - &mu;<sub>M</sub></strong>.</p>
+    <p>The estimator is the rule used to estimate that parameter from the sample, namely <strong>&#772;X;<sub>F</sub> - &#772;X;<sub>M</sub></strong>. Once the sample is drawn, that estimator produces an observed numerical value called a statistic. Here the sample statistic is <strong>63.92 - 69.21 = -5.29</strong>, so the sample suggests that female students scored about 5.29 marks lower on average than male students.</p>
+  </div>
+
+  <div class="question">
+    <h3>Question 1.2 - Test whether the variances are equal [5]</h3>
+    <p><strong>Hypotheses:</strong> H<sub>0</sub>: &sigma;<sub>M</sub><sup>2</sup> = &sigma;<sub>F</sub><sup>2</sup>; H<sub>1</sub>: &sigma;<sub>M</sub><sup>2</sup> &ne; &sigma;<sub>F</sub><sup>2</sup>.</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Test</th><th>F</th><th>df</th><th>p-value</th><th>Decision at 5%</th></tr></thead>
+        <tbody>
+          <tr><td>F test for variances</td><td>0.7913</td><td>(115, 133)</td><td>0.1978</td><td>Fail to reject H<sub>0</sub></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Because the p-value is greater than 0.05, there is not enough evidence to conclude that the two population variances differ. For the mean comparison, it is therefore reasonable to use the equal-variance two-sample t test.</p>
+  </div>
+
+  <div class="question">
+    <h3>Question 1.3 - Test whether the average mathematics scores differ [5]</h3>
+    <p><strong>Hypotheses:</strong> H<sub>0</sub>: &mu;<sub>F</sub> - &mu;<sub>M</sub> = 0; H<sub>1</sub>: &mu;<sub>F</sub> - &mu;<sub>M</sub> &ne; 0.</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Test</th><th>t</th><th>df</th><th>p-value</th><th>Decision at 5%</th></tr></thead>
+        <tbody>
+          <tr><td>Pooled two-sample t test</td><td>-2.8472</td><td>248</td><td>0.0048</td><td>Reject H<sub>0</sub></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>The p-value is below 0.05, so there is statistically significant evidence that the mean mathematics scores are different for male and female students. In this sample, male students scored higher on average (69.21) than female students (63.92).</p>
+  </div>
+
+  <div class="question">
+    <h3>Question 1.4 - 95% confidence interval for female minus male mean score [3]</h3>
+    <p>The 95% confidence interval for <strong>&mu;<sub>F</sub> - &mu;<sub>M</sub></strong> is <strong>(-8.95, -1.63)</strong>.</p>
+    <div class="finding"><strong>Interpretation:</strong> We are 95% confident that the true average mathematics score of female students is between 1.63 and 8.95 marks lower than that of male students. Because the entire interval is negative, it supports the conclusion that the gender means differ and that the male mean is higher.</div>
+  </div>
+
+</div>
+</div>
+
+<div id="secB">
+<div class="section-header">
+  <h2>Section B - Household Income</h2>
+  <div class="marks">Dataset: Household.csv | Population: WC = 240, EC = 264 | Assignment 1 stratified sample reused: WC = 24, EC = 26</div>
+</div>
+<div class="section-body">
+
+  <div class="stat-grid">
+    <div class="stat-card"><div class="label">WC variance</div><div class="value">5 355 263</div></div>
+    <div class="stat-card"><div class="label">EC variance</div><div class="value">8 709 901</div></div>
+    <div class="stat-card"><div class="label">WC sample mean</div><div class="value">R 21 309.86</div></div>
+    <div class="stat-card"><div class="label">EC sample mean</div><div class="value">R 20 688.05</div></div>
+  </div>
+
+  <div class="question">
+    <h3>Question 1.1 - Graphical comparison of population variances [6]</h3>
+    <p>The histograms, boxplot and density plot all show that the Eastern Cape income distribution is more spread out than the Western Cape distribution. The EC box is wider, the whiskers are longer, and the histogram stretches further into both tails.</p>
+    <figure>
+      <img src="output/A3_B1_variance_comparison.png" alt="Population variance comparison for HEADINC in WC and EC">
+      <figcaption>Figure 1 - Population graphical comparison of HEADINC for Western Cape and Eastern Cape</figcaption>
+    </figure>
+    <div class="finding"><strong>Graphical conclusion:</strong> The Eastern Cape population clearly shows greater variability in HEADINC than the Western Cape population.</div>
+  </div>
+
+  <div class="question">
+    <h3>Question 1.2 - Numerical comparison of population variances [6]</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Measure</th><th>Western Cape</th><th>Eastern Cape</th><th>Interpretation</th></tr></thead>
+        <tbody>
+          <tr><td>Variance</td><td>5 355 263.07</td><td>8 709 900.71</td><td>EC variance is larger</td></tr>
+          <tr><td>Standard deviation</td><td>2 314.14</td><td>2 951.25</td><td>EC incomes vary more around the mean</td></tr>
+          <tr><td>IQR</td><td>2 628.21</td><td>3 162.58</td><td>EC middle 50% is more spread out</td></tr>
+          <tr><td>Range</td><td>14 994.05</td><td>17 311.99</td><td>EC has the wider overall spread</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Numerically, the EC population variance is about <strong>1.63 times</strong> the WC population variance (8 709 900.71 / 5 355 263.07).</p>
+  </div>
+
+  <div class="question">
+    <h3>Question 1.3 - Overall variance conclusion [2]</h3>
+    <p>Both the graphical and numerical evidence lead to the same conclusion: the variance of HEADINC is higher in the Eastern Cape than in the Western Cape. The EC income distribution is therefore more dispersed, while WC incomes are more tightly clustered around their mean.</p>
+  </div>
+
+  <div class="question">
+    <h3>Question 1.4 - 95% confidence interval for mean income difference (WC - EC) [5]</h3>
+    <p>Using the Assignment 1 sample and a Welch interval, the 95% confidence interval for <strong>&mu;<sub>WC</sub> - &mu;<sub>EC</sub></strong> is <strong>(-939.20, 2 182.82)</strong>.</p>
+    <div class="finding"><strong>Interpretation:</strong> The interval contains 0, so a true difference of zero is plausible. Based on this sample, the Western Cape average income could be slightly lower than the Eastern Cape average, or up to about R2 182.82 higher.</div>
+  </div>
+
+  <div class="question">
+    <h3>Question 1.5 - Is the WC average income higher than the EC average income? [5]</h3>
+    <p><strong>Hypotheses:</strong> H<sub>0</sub>: &mu;<sub>WC</sub> &le; &mu;<sub>EC</sub>; H<sub>1</sub>: &mu;<sub>WC</sub> &gt; &mu;<sub>EC</sub>.</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Test</th><th>t</th><th>df</th><th>p-value</th><th>Decision</th></tr></thead>
+        <tbody>
+          <tr><td>One-sided Welch t test</td><td>0.8029</td><td>43.88</td><td>0.2132</td><td>Fail to reject H<sub>0</sub></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>The sample mean for WC is higher than EC by about <strong>R621.81</strong>, but the p-value is far above 0.05. There is therefore not enough inferential evidence to conclude that the average income in the Western Cape is higher than the average income in the Eastern Cape.</p>
+  </div>
+
+</div>
+</div>
+
+<div id="secC">
+<div class="section-header">
+  <h2>Section C - Employee Retention</h2>
+  <div class="marks">Dataset: Employee_Retention.csv | Full data n = 14 999 | Section C sample used for inference: 25% random sample, n = 3 750</div>
+</div>
+<div class="section-body">
+
+  <div class="warn"><strong>Sampling note:</strong> Earlier employee analyses in this workspace used the full dataset. For the questions in Assignment 3 that explicitly require a sample, a reproducible 25% random sample was drawn with <code>set.seed(4346549)</code>, giving 2 802 employees who stayed and 948 employees who left.</div>
+
+  <div class="stat-grid">
+    <div class="stat-card"><div class="label">Stayed mean years</div><div class="value">3.40</div></div>
+    <div class="stat-card"><div class="label">Left mean years</div><div class="value">3.85</div></div>
+    <div class="stat-card"><div class="label">Stayed variance</div><div class="value">2.48</div></div>
+    <div class="stat-card"><div class="label">Left variance</div><div class="value">0.93</div></div>
+  </div>
+
+  <div class="question">
+    <h3>Question 1.1 - F test for equality of variances in time_spend_company [5]</h3>
+    <p><strong>Hypotheses:</strong> H<sub>0</sub>: &sigma;<sub>Stayed</sub><sup>2</sup> = &sigma;<sub>Left</sub><sup>2</sup>; H<sub>1</sub>: &sigma;<sub>Stayed</sub><sup>2</sup> &ne; &sigma;<sub>Left</sub><sup>2</sup>.</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Group</th><th>n</th><th>Mean</th><th>Variance</th><th>Std Dev</th></tr></thead>
+        <tbody>
+          <tr><td>Stayed</td><td>11 428</td><td>3.3800</td><td>2.4409</td><td>1.5623</td></tr>
+          <tr><td>Left</td><td>3 571</td><td>3.8765</td><td>0.9559</td><td>0.9777</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>The F test gave <strong>F = 2.5536</strong> with p-value <strong>&lt; 2.2 &times; 10<sup>-16</sup></strong>. This p-value is essentially zero, meaning that such a large variance difference would be extremely unlikely if the population variances were truly equal.</p>
+    <div class="finding"><strong>Conclusion:</strong> Reject H<sub>0</sub>. The population variances are not equal. The employees who stayed have much greater variability in time spent at the company than those who left.</div>
+  </div>
+
+  <div class="question">
+    <h3>Question 1.2 - Sample hypothesis test for mean time spent at company [5]</h3>
+    <p><strong>Hypotheses:</strong> H<sub>0</sub>: &mu;<sub>Stayed</sub> = &mu;<sub>Left</sub>; H<sub>1</sub>: &mu;<sub>Stayed</sub> &ne; &mu;<sub>Left</sub>.</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Test</th><th>t</th><th>df</th><th>p-value</th><th>Decision at 1%</th></tr></thead>
+        <tbody>
+          <tr><td>Welch two-sample t test</td><td>-10.342</td><td>2680.7</td><td>&lt; 2.2 &times; 10<sup>-16</sup></td><td>Reject H<sub>0</sub></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>The sample mean time spent at the company is <strong>3.4029 years</strong> for employees who stayed and <strong>3.8502 years</strong> for employees who left. The 99% confidence interval for <strong>&mu;<sub>Stayed</sub> - &mu;<sub>Left</sub></strong> is <strong>(-0.5588, -0.3358)</strong>.</p>
+    <div class="finding"><strong>Conclusion:</strong> At the 1% level there is very strong evidence that the average time spent at the company differs between the two groups. Employees who left had, on average, been with the company for about <strong>0.45 years</strong> longer than those still working there.</div>
+  </div>
+
+  <div class="question">
+    <h3>Question 1.3 - Repeat the comparison using ANOVA [5]</h3>
+    <p><strong>Hypotheses:</strong> H<sub>0</sub>: &mu;<sub>Stayed</sub> = &mu;<sub>Left</sub>; H<sub>1</sub>: not all group means are equal.</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Source</th><th>Df</th><th>Sum Sq</th><th>Mean Sq</th><th>F</th><th>p-value</th></tr></thead>
+        <tbody>
+          <tr><td>left_group</td><td>1</td><td>141.71</td><td>141.71</td><td>67.83</td><td>2.44 &times; 10<sup>-16</sup></td></tr>
+          <tr><td>Residuals</td><td>3748</td><td>7831.00</td><td>2.09</td><td>-</td><td>-</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>The ANOVA p-value is also far below 0.01, so it reaches the same substantive conclusion as the t test: the average years spent with the company differ between employees who stayed and those who left.</p>
+  </div>
+
+  <div class="question">
+    <h3>Question 1.4 - Can the ANOVA output be trusted? [3]</h3>
+    <p>Not fully as the primary result. The sample is unbalanced (<strong>2 802</strong> stayed versus <strong>948</strong> left) and Question 1.1 showed clear inequality of variances. Those conditions are not ideal for the standard <code>aov()</code> procedure, so the Welch t test in Question 1.2 is the more defensible inferential result.</p>
+    <p>That said, because there are only two groups and the p-value is extremely small in both procedures, the ANOVA result still supports the same practical conclusion. The conclusion is robust, but the Welch test is the one that should be preferred.</p>
+  </div>
+
+  <div class="question">
+    <h3>Question 2.1 - Full-data contingency table of left by promotion [4]</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Left status</th><th>Not promoted</th><th>Promoted</th><th>Total</th></tr></thead>
+        <tbody>
+          <tr><td>Stayed</td><td>11 128</td><td>300</td><td>11 428</td></tr>
+          <tr><td>Left</td><td>3 552</td><td>19</td><td>3 571</td></tr>
+          <tr><td><strong>Total</strong></td><td><strong>14 680</strong></td><td><strong>319</strong></td><td><strong>14 999</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>The chi-square expected counts for the four cells are 11 184.95, 243.05, 3 495.05 and 75.95. Since all expected counts are well above 5, the group-size assumption for the chi-square test is met.</p>
+  </div>
+
+  <div class="question">
+    <h3>Question 2.2 - Sample contingency table of left by promotion [2]</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Left status</th><th>Not promoted</th><th>Promoted</th><th>Total</th></tr></thead>
+        <tbody>
+          <tr><td>Stayed</td><td>2 719</td><td>83</td><td>2 802</td></tr>
+          <tr><td>Left</td><td>943</td><td>5</td><td>948</td></tr>
+          <tr><td><strong>Total</strong></td><td><strong>3 662</strong></td><td><strong>88</strong></td><td><strong>3 750</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <figure>
+      <img src="output/A3_C2_left_promo_sample.png" alt="Sample promotion and leaving relationship">
+      <figcaption>Figure 2 - Sample comparison of leaving status by promotion status</figcaption>
+    </figure>
+  </div>
+
+  <div class="question">
+    <h3>Question 2.3 - Chi-square test of dependence [4]</h3>
+    <p><strong>Hypotheses:</strong> H<sub>0</sub>: leaving the company is independent of promotion status; H<sub>1</sub>: leaving the company is dependent on promotion status.</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Test</th><th>&chi;<sup>2</sup></th><th>df</th><th>p-value</th><th>Decision</th></tr></thead>
+        <tbody>
+          <tr><td>Pearson chi-square (Yates corrected)</td><td>17.277</td><td>1</td><td>0.0000323</td><td>Reject H<sub>0</sub></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>The p-value is far below 0.05, so there is strong evidence that leaving the company depends on whether an employee was promoted in the last 5 years. In the sample, <strong>25.75%</strong> of non-promoted employees left (943/3 662), compared with only <strong>5.68%</strong> of promoted employees (5/88).</p>
+    <div class="finding"><strong>Conclusion:</strong> Promotion status and leaving the company are statistically associated. Employees who were promoted were much less likely to leave, so lack of promotion appears to be linked to turnover.</div>
+  </div>
+
+</div>
+</div>
+
+</div>
+</body>
+</html>
