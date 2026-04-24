@@ -1,5 +1,6 @@
 dir.create("output", showWarnings = FALSE)
 
+# Setup -----------------------------------------------------------------------
 results_path <- file.path("output", "assignment3_results.txt")
 sink(results_path, split = TRUE)
 
@@ -7,6 +8,7 @@ cat("BIA713 Assignment 3 Results\n")
 cat("===========================\n\n")
 
 # Section A -------------------------------------------------------------------
+# Question 1 - Male vs female mathematics scores
 sp <- read.csv("StudentPerformance.csv")
 set.seed(4346549)
 sample_sp <- sp[sample(nrow(sp), 250), ]
@@ -39,6 +41,7 @@ print(ttest_a)
 cat("\n\n")
 
 # Section B -------------------------------------------------------------------
+# Question 1.1 to 1.3 - Population variance comparison of HEADINC
 hh <- read.csv("Household.csv")
 wc_pop_df <- hh[hh$PROVINCE == "WC", ]
 ec_pop_df <- hh[hh$PROVINCE == "EC", ]
@@ -91,6 +94,7 @@ set.seed(4346549)
 wc_sample <- wc_pop_df[sample(nrow(wc_pop_df), 24), ]
 ec_sample <- ec_pop_df[sample(nrow(ec_pop_df), 26), ]
 
+# Question 1.4 and 1.5 - Sample confidence interval and hypothesis test
 ttest_b_ci <- t.test(
   wc_sample$HEADINC,
   ec_sample$HEADINC,
@@ -126,10 +130,12 @@ print(ttest_b_gt)
 cat("\n\n")
 
 # Section C -------------------------------------------------------------------
+# Shared data preparation for Section C questions
 er <- read.csv("Employee_Retention.csv")
 years_left_pop <- er$time_spend_company[er$left == 1]
 years_stayed_pop <- er$time_spend_company[er$left == 0]
 
+# Question 1.1 - F test for equality of variances using full data
 f_test_c <- var.test(years_stayed_pop, years_left_pop)
 
 set.seed(4346549)
@@ -137,6 +143,7 @@ er_sample <- er[sample(nrow(er), round(nrow(er) * 0.25)), ]
 years_left_sample <- er_sample$time_spend_company[er_sample$left == 1]
 years_stayed_sample <- er_sample$time_spend_company[er_sample$left == 0]
 
+# Question 1.2 - Welch t test using the sample
 ttest_c <- t.test(
   years_stayed_sample,
   years_left_sample,
@@ -145,6 +152,7 @@ ttest_c <- t.test(
   conf.level = 0.99
 )
 
+# Question 1.3 - ANOVA using the sample
 anova_sample <- data.frame(
   time_spend_company = er_sample$time_spend_company,
   left_group = factor(er_sample$left, levels = c(0, 1), labels = c("Stayed", "Left"))
@@ -152,6 +160,7 @@ anova_sample <- data.frame(
 anova_model <- aov(time_spend_company ~ left_group, data = anova_sample)
 anova_summary <- summary(anova_model)
 
+# Question 2.1 - Full-data contingency table of left by promotion
 promo_pop_table <- table(
   Left = factor(er$left, levels = c(0, 1), labels = c("Stayed", "Left")),
   Promotion = factor(
@@ -162,6 +171,7 @@ promo_pop_table <- table(
 )
 promo_pop_chisq <- chisq.test(promo_pop_table)
 
+# Question 2.2 and 2.3 - Sample contingency table and chi-square test
 promo_sample_table <- table(
   Left = factor(er_sample$left, levels = c(0, 1), labels = c("Stayed", "Left")),
   Promotion = factor(
@@ -172,6 +182,7 @@ promo_sample_table <- table(
 )
 promo_sample_chisq <- chisq.test(promo_sample_table)
 
+# Supporting figure for Section C Question 1
 png(file.path("output", "A3_C1_time_spend_boxplot.png"), width = 850, height = 520)
 boxplot(
   time_spend_company ~ left_group,
@@ -184,6 +195,7 @@ boxplot(
 )
 dev.off()
 
+# Supporting figure for Section C Question 2
 png(file.path("output", "A3_C2_left_promo_sample.png"), width = 850, height = 520)
 barplot(
   t(promo_sample_table),
