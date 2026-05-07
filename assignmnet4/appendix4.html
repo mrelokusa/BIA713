@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BIA713 Assignment 4 - R Code Appendix | 4346549</title>
+<style>
+  :root {
+    --accent: #1a3a5c;
+    --accent2: #2e6da4;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --border: #d8e1ea;
+    --text: #1f2933;
+    --muted: #576574;
+    --code-bg: #eef4fa;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Calibri", "Segoe UI", Arial, sans-serif;
+    font-size: 11pt;
+    line-height: 1.6;
+    color: var(--text);
+    background: var(--bg);
+  }
+  .navbar {
+    background: var(--accent);
+    color: white;
+    padding: 10px 44px;
+    display: flex;
+    gap: 18px;
+    align-items: center;
+    flex-wrap: wrap;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+  }
+  .navbar .brand { font-weight: 700; }
+  .navbar .spacer { flex: 1; }
+  .navbar a {
+    color: rgba(255,255,255,0.78);
+    text-decoration: none;
+    font-size: 10.5pt;
+    border-bottom: 2px solid transparent;
+    padding-bottom: 2px;
+  }
+  .navbar a:hover, .navbar a.active { color: white; border-bottom-color: #89cff0; }
+  .page { max-width: 980px; margin: 0 auto; padding: 36px 46px 52px; }
+  .title-page {
+    text-align: center;
+    padding: 54px 0 34px;
+    border-bottom: 3px solid var(--accent);
+    margin-bottom: 24px;
+  }
+  .title-page h1 { color: var(--accent); font-size: 22pt; margin-bottom: 8px; }
+  .title-page h2 { color: var(--muted); font-size: 14pt; font-weight: 400; margin-bottom: 22px; }
+  .title-meta {
+    display: inline-block;
+    background: var(--accent);
+    color: white;
+    border-radius: 6px;
+    padding: 14px 30px;
+    line-height: 1.8;
+  }
+  .intro {
+    background: #edf4fb;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin-bottom: 18px;
+  }
+  .section-header {
+    background: var(--accent);
+    color: white;
+    padding: 10px 16px;
+    border-radius: 6px 6px 0 0;
+    margin-top: 18px;
+  }
+  .section-header h2 { font-size: 12.5pt; }
+  .section-body {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-top: 0;
+    border-radius: 0 0 6px 6px;
+    padding: 16px 18px;
+  }
+  .code-title {
+    color: var(--accent2);
+    font-weight: 700;
+    margin: 10px 0 6px;
+  }
+  .code-title:first-child { margin-top: 0; }
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 12px 14px;
+    font-family: "Courier New", monospace;
+    font-size: 10pt;
+    line-height: 1.42;
+    white-space: pre-wrap;
+    overflow-x: auto;
+  }
+  @media (max-width: 720px) {
+    .page { padding: 24px 18px; }
+    .navbar { padding: 10px 18px; }
+  }
+  @page {
+    margin: 18mm 16mm;
+    @bottom-left {
+      content: "BIA713 Assignment 4 Code | Zondi, ENZ | 4346549";
+      font-family: "Calibri", Arial, sans-serif;
+      font-size: 8.5pt;
+      color: #777;
+    }
+    @bottom-right {
+      content: "Page " counter(page);
+      font-family: "Calibri", Arial, sans-serif;
+      font-size: 8.5pt;
+      color: #777;
+    }
+  }
+  @media print {
+    .navbar { display: none; }
+    body { background: white; font-size: 9pt; line-height: 1.25; }
+    .page { max-width: 100%; padding: 0; }
+    .title-page { padding: 24px 0 14px; margin-bottom: 0; break-after: page; }
+    .title-page h1 { font-size: 16pt; }
+    .title-page h2 { font-size: 11pt; margin-bottom: 14px; }
+    .title-meta { padding: 9px 22px; font-size: 9.8pt; }
+    .intro { padding: 6px 8px; margin-bottom: 8px; font-size: 8.5pt; }
+    .section-header { padding: 5px 8px; margin-top: 7px; }
+    .section-header h2 { font-size: 9.6pt; }
+    .section-body { padding: 7px 8px; }
+    .code-title { font-size: 8.8pt; margin: 5px 0 3px; }
+    pre { font-size: 7.7pt; line-height: 1.18; padding: 5px 6px; }
+  }
+</style>
+</head>
+<body>
+<nav class="navbar">
+  <span class="brand">BIA713 | 4346549</span>
+  <span class="spacer"></span>
+  <a href="../index.html">Assignment 1 Report</a>
+  <a href="../assignment2.html">Assignment 2 Report</a>
+  <a href="../assignment3.html">Assignment 3 Report</a>
+  <a href="assignment4.html">Assignment 4 Report</a>
+  <a href="appendix4.html" class="active">A4 R Code</a>
+</nav>
+
+<div class="page">
+  <div class="title-page">
+    <h1>BIA713 - Statistics and Visualization</h1>
+    <h2>Assignment 4 | R Code Appendix</h2>
+    <div class="title-meta">
+      <strong>Zondi, ENZ</strong><br>
+      Student Number: 4346549<br>
+      File: BIA713_assignment4_code_4346549
+    </div>
+  </div>
+
+  <div class="intro">
+    Code is organised by question. The sample is recreated using <strong>set.seed(4346549)</strong> and the analysis uses base R functions, including <strong>lm()</strong> and <strong>glm(..., family = binomial)</strong>.
+  </div>
+
+  <div class="section-header"><h2>Setup and Sample</h2></div>
+  <div class="section-body">
+    <div class="code-title">Load data, create 25% sample, and recode the binary response</div>
+    <pre># ============================================================
+# BIA713 Assignment 4 - 2026
+# Student: Zondi, ENZ | Student Number: 4346549
+# Section A only
+# ============================================================
+
+dir.create("output", showWarnings = FALSE)
+
+results_path &lt;- file.path("output", "assignment4_results.txt")
+sink(results_path, split = TRUE)
+
+cat("BIA713 Assignment 4 Results\n")
+cat("===========================\n\n")
+
+sp &lt;- read.csv("../StudentPerformance.csv")
+
+set.seed(4346549)
+sample_sp &lt;- sp[sample(nrow(sp), 250), ]
+sample_sp$prep_completed &lt;- ifelse(
+  sample_sp$Test_preparation_course == "completed",
+  1,
+  0
+)
+
+write.csv(
+  sample_sp,
+  file.path("output", "BIA713_assignment4_sample_A_4346549.csv"),
+  row.names = FALSE
+)
+
+cat("Sample information\n")
+cat("------------------\n")
+cat(sprintf("Population size: %d\n", nrow(sp)))
+cat(sprintf("Sample size: %d\n", nrow(sample_sp)))
+cat("Test preparation count:\n")
+print(table(sample_sp$Test_preparation_course))
+cat("\nMath score summary by test preparation group:\n")
+print(tapply(sample_sp$Math_score, sample_sp$Test_preparation_course, summary))
+cat("\n\n")</pre>
+  </div>
+
+  <div class="section-header"><h2>Question 1</h2></div>
+  <div class="section-body">
+    <div class="code-title">Least squares plot and linear regression model</div>
+    <pre># Relationship between test preparation course and mathematics score
+q1_model &lt;- lm(Math_score ~ prep_completed, data = sample_sp)
+
+png(file.path("output", "A4_Q1.1_testprep_math_lm.png"), width = 900, height = 560)
+x_jit &lt;- jitter(sample_sp$prep_completed, amount = 0.06)
+plot(
+  x_jit,
+  sample_sp$Math_score,
+  xaxt = "n",
+  xlim = c(-0.25, 1.25),
+  xlab = "Test preparation course",
+  ylab = "Mathematics score",
+  main = "Test Preparation Course and Mathematics Score",
+  pch = 16,
+  col = rgb(0.10, 0.23, 0.36, 0.45)
+)
+axis(1, at = c(0, 1), labels = c("none", "completed"))
+abline(q1_model, col = "#b3202a", lwd = 2)
+group_means &lt;- tapply(sample_sp$Math_score, sample_sp$prep_completed, mean)
+points(c(0, 1), group_means, pch = 18, cex = 1.8, col = "#1b7f4b")
+legend(
+  "topleft",
+  legend = c("Sample student", "Least squares line", "Group mean"),
+  col = c(rgb(0.10, 0.23, 0.36, 0.45), "#b3202a", "#1b7f4b"),
+  pch = c(16, NA, 18),
+  lty = c(NA, 1, NA),
+  lwd = c(NA, 2, NA),
+  bty = "n"
+)
+dev.off()
+
+cat("Question 1 model: Math_score ~ prep_completed\n")
+cat("-----------------------------------------------\n")
+print(summary(q1_model))
+cat("\nConfidence intervals for Question 1 coefficients:\n")
+print(confint(q1_model))
+cat("\n\n")</pre>
+  </div>
+
+  <div class="section-header"><h2>Question 2</h2></div>
+  <div class="section-body">
+    <div class="code-title">Full logistic regression model</div>
+    <pre>q2_full &lt;- glm(
+  prep_completed ~ Math_score + Reading_score + Writing_score,
+  family = binomial,
+  data = sample_sp
+)
+
+cat("Question 2 full logistic model\n")
+cat("------------------------------\n")
+print(summary(q2_full))</pre>
+
+    <div class="code-title">Multicollinearity check</div>
+    <pre>vif_calc &lt;- function(data, predictors) {
+  values &lt;- numeric(length(predictors))
+  names(values) &lt;- predictors
+  for (v in predictors) {
+    other_vars &lt;- setdiff(predictors, v)
+    f &lt;- as.formula(paste(v, "~", paste(other_vars, collapse = " + ")))
+    r2 &lt;- summary(lm(f, data = data))$r.squared
+    values[v] &lt;- 1 / (1 - r2)
+  }
+  values
+}
+
+score_vars &lt;- c("Math_score", "Reading_score", "Writing_score")
+score_cor &lt;- cor(sample_sp[, score_vars])
+score_vif &lt;- vif_calc(sample_sp, score_vars)
+
+cat("\nCorrelations among score predictors:\n")
+print(round(score_cor, 4))
+cat("\nVIF values for full model predictors:\n")
+print(round(score_vif, 4))
+cat("\n\n")</pre>
+
+    <div class="code-title">Final logistic model after removing Reading_score</div>
+    <pre>q2_final &lt;- glm(
+  prep_completed ~ Math_score + Writing_score,
+  family = binomial,
+  data = sample_sp
+)
+
+final_vars &lt;- c("Math_score", "Writing_score")
+final_vif &lt;- vif_calc(sample_sp, final_vars)
+
+cat("Question 2 final logistic model\n")
+cat("-------------------------------\n")
+print(summary(q2_final))
+cat("\nVIF values for final model predictors:\n")
+print(round(final_vif, 4))
+cat("\nTransformed final model coefficients (odds ratios):\n")
+print(round(exp(coef(q2_final)), 4))
+cat("\n95% confidence intervals for odds ratios:\n")
+print(round(exp(confint.default(q2_final)), 4))
+cat("\n\n")</pre>
+
+    <div class="code-title">ROC curve and model accuracy checks</div>
+    <pre>roc_curve &lt;- function(actual, probability) {
+  thresholds &lt;- c(Inf, sort(unique(probability), decreasing = TRUE), -Inf)
+  positives &lt;- sum(actual == 1)
+  negatives &lt;- sum(actual == 0)
+  tpr &lt;- sapply(thresholds, function(t) {
+    sum(probability &gt;= t &amp; actual == 1) / positives
+  })
+  fpr &lt;- sapply(thresholds, function(t) {
+    sum(probability &gt;= t &amp; actual == 0) / negatives
+  })
+  data.frame(threshold = thresholds, tpr = tpr, fpr = fpr)
+}
+
+auc_value &lt;- function(actual, probability) {
+  positives &lt;- sum(actual == 1)
+  negatives &lt;- sum(actual == 0)
+  ranks &lt;- rank(probability)
+  (sum(ranks[actual == 1]) - positives * (positives + 1) / 2) /
+    (positives * negatives)
+}
+
+final_prob &lt;- fitted(q2_final)
+final_pred &lt;- ifelse(final_prob &gt;= 0.5, 1, 0)
+confusion &lt;- table(
+  Actual = sample_sp$prep_completed,
+  Predicted = final_pred
+)
+roc_final &lt;- roc_curve(sample_sp$prep_completed, final_prob)
+auc_final &lt;- auc_value(sample_sp$prep_completed, final_prob)
+
+png(file.path("output", "A4_Q2.5_roc_curve.png"), width = 760, height = 620)
+plot(
+  roc_final$fpr,
+  roc_final$tpr,
+  type = "l",
+  lwd = 2,
+  col = "#1a3a5c",
+  xlim = c(0, 1),
+  ylim = c(0, 1),
+  xlab = "False positive rate",
+  ylab = "True positive rate",
+  main = "ROC Curve for Final Logistic Regression Model"
+)
+abline(0, 1, lty = 2, col = "grey50")
+text(0.62, 0.20, labels = sprintf("AUC = %.3f", auc_final), cex = 1.1)
+dev.off()
+
+cat("ROC and classification information\n")
+cat("----------------------------------\n")
+cat(sprintf("AUC: %.4f\n", auc_final))
+cat("Confusion matrix using a 0.50 cut-off:\n")
+print(confusion)
+cat(sprintf("Accuracy: %.4f\n", mean(final_pred == sample_sp$prep_completed)))
+cat(sprintf(
+  "Sensitivity: %.4f\n",
+  sum(final_pred == 1 &amp; sample_sp$prep_completed == 1) /
+    sum(sample_sp$prep_completed == 1)
+))
+cat(sprintf(
+  "Specificity: %.4f\n",
+  sum(final_pred == 0 &amp; sample_sp$prep_completed == 0) /
+    sum(sample_sp$prep_completed == 0)
+))
+
+sink()</pre>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BIA713 Assignment 4 - 2026 | 4346549</title>
+<style>
+  :root {
+    --accent: #1a3a5c;
+    --accent2: #2e6da4;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --border: #d8e1ea;
+    --text: #1f2933;
+    --muted: #576574;
+    --code-bg: #eef4fa;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Calibri", "Segoe UI", Arial, sans-serif;
+    font-size: 11pt;
+    line-height: 1.55;
+    color: var(--text);
+    background: var(--bg);
+  }
+  .navbar {
+    background: var(--accent);
+    color: white;
+    padding: 10px 44px;
+    display: flex;
+    gap: 18px;
+    align-items: center;
+    flex-wrap: wrap;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+  }
+  .navbar .brand { font-weight: 700; }
+  .navbar .spacer { flex: 1; }
+  .navbar a {
+    color: rgba(255,255,255,0.78);
+    text-decoration: none;
+    font-size: 10.5pt;
+    border-bottom: 2px solid transparent;
+    padding-bottom: 2px;
+  }
+  .navbar a:hover, .navbar a.active { color: white; border-bottom-color: #89cff0; }
+  .page { max-width: 980px; margin: 0 auto; padding: 36px 46px 52px; }
+  .title-page {
+    text-align: center;
+    padding: 70px 0 54px;
+    border-bottom: 3px solid var(--accent);
+    margin-bottom: 30px;
+  }
+  .title-page h1 { color: var(--accent); font-size: 24pt; margin-bottom: 8px; }
+  .title-page h2 { color: var(--muted); font-size: 15pt; font-weight: 400; margin-bottom: 26px; }
+  .title-meta {
+    display: inline-block;
+    background: var(--accent);
+    color: white;
+    border-radius: 6px;
+    padding: 16px 34px;
+    line-height: 1.8;
+  }
+  .section-header {
+    background: var(--accent);
+    color: white;
+    padding: 12px 18px;
+    border-radius: 6px 6px 0 0;
+    margin-top: 22px;
+  }
+  .section-header h2 { font-size: 13.5pt; }
+  .section-header .marks { font-size: 9.6pt; opacity: 0.88; margin-top: 2px; }
+  .section-body {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-top: 0;
+    border-radius: 0 0 6px 6px;
+    padding: 20px 24px;
+  }
+  .question {
+    padding-top: 14px;
+    margin-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+  .question:first-child { padding-top: 0; margin-top: 0; border-top: 0; }
+  .question h3 { color: var(--accent2); font-size: 11.4pt; margin-bottom: 6px; }
+  p { margin-bottom: 8px; }
+  code {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1px 4px;
+    font-family: "Courier New", monospace;
+    font-size: 9.5pt;
+  }
+  .tbl-wrap { overflow-x: auto; margin: 10px 0 12px; }
+  table { width: 100%; border-collapse: collapse; font-size: 10pt; }
+  th {
+    background: var(--accent);
+    color: white;
+    text-align: left;
+    padding: 7px 8px;
+    font-weight: 600;
+  }
+  td {
+    border-bottom: 1px solid var(--border);
+    padding: 6px 8px;
+    vertical-align: top;
+  }
+  tbody tr:nth-child(even) { background: #f2f6fb; }
+  .finding {
+    background: #eaf5ee;
+    border-left: 4px solid #2e8b57;
+    border-radius: 0 5px 5px 0;
+    padding: 9px 12px;
+    margin: 9px 0;
+    font-size: 10.2pt;
+  }
+  .warn {
+    background: #fff8e5;
+    border-left: 4px solid #d39100;
+    border-radius: 0 5px 5px 0;
+    padding: 9px 12px;
+    margin: 9px 0;
+    font-size: 10.2pt;
+  }
+  figure { margin: 12px 0; text-align: center; }
+  figure img {
+    max-width: 100%;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+  }
+  figcaption { color: var(--muted); font-size: 9.2pt; margin-top: 4px; font-style: italic; }
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    align-items: start;
+  }
+  .mini-note { color: var(--muted); font-size: 10pt; }
+  @media (max-width: 720px) {
+    .page { padding: 24px 18px; }
+    .two-col { grid-template-columns: 1fr; }
+    .navbar { padding: 10px 18px; }
+  }
+  @page {
+    margin: 18mm 16mm;
+    @bottom-left {
+      content: "BIA713 Assignment 4 | Zondi, ENZ | 4346549";
+      font-family: "Calibri", Arial, sans-serif;
+      font-size: 8.5pt;
+      color: #777;
+    }
+    @bottom-right {
+      content: "Page " counter(page);
+      font-family: "Calibri", Arial, sans-serif;
+      font-size: 8.5pt;
+      color: #777;
+    }
+  }
+  @media print {
+    .navbar { display: none; }
+    body { background: white; font-size: 9.1pt; line-height: 1.26; }
+    .page { max-width: 100%; padding: 0; }
+    .title-page { padding: 28px 0 16px; margin-bottom: 0; break-after: page; }
+    .title-page h1 { font-size: 17pt; }
+    .title-page h2 { font-size: 11pt; margin-bottom: 16px; }
+    .title-meta { padding: 10px 24px; font-size: 10pt; }
+    .section-header { padding: 6px 10px; margin-top: 8px; }
+    .section-header h2 { font-size: 10.5pt; }
+    .section-header .marks { font-size: 8pt; }
+    .section-body { padding: 7px 9px; }
+    .question { padding-top: 6px; margin-top: 6px; }
+    .question h3 { font-size: 9.4pt; margin-bottom: 3px; }
+    p { margin-bottom: 4px; }
+    th, td { padding: 3px 5px; font-size: 8pt; }
+    .finding, .warn { padding: 5px 7px; margin: 4px 0; font-size: 8.4pt; }
+    figure { margin: 4px 0; }
+    figure img { max-height: 165px; width: auto; max-width: 100%; }
+    figcaption { font-size: 7pt; margin-top: 2px; }
+    code { font-size: 8pt; padding: 0 2px; }
+    .two-col { gap: 8px; }
+  }
+</style>
+</head>
+<body>
+<nav class="navbar">
+  <span class="brand">BIA713 | 4346549</span>
+  <span class="spacer"></span>
+  <a href="../index.html">Assignment 1 Report</a>
+  <a href="../assignment2.html">Assignment 2 Report</a>
+  <a href="../assignment3.html">Assignment 3 Report</a>
+  <a href="assignment4.html" class="active">Assignment 4 Report</a>
+  <a href="appendix4.html">A4 R Code</a>
+</nav>
+
+<div class="page">
+  <div class="title-page">
+    <h1>BIA713 - Statistics and Visualization</h1>
+    <h2>Assignment 4 | Section A | 2026</h2>
+    <div class="title-meta">
+      <strong>Zondi, ENZ</strong><br>
+      Student Number: 4346549<br>
+      File: BIA713_assignment4_report_4346549<br>
+      Due: Thursday 7 May 2026 at 23:45
+    </div>
+  </div>
+
+  <div class="section-header">
+    <h2>Question 1 - Test Preparation Course and Mathematics Score</h2>
+    <div class="marks">StudentPerformance.csv | 25% sample, n = 250 | completed = 95, none = 155</div>
+  </div>
+  <div class="section-body">
+    <div class="question">
+      <h3>1.1 Plot and interpretation</h3>
+      <div class="two-col">
+        <figure>
+          <img src="output/A4_Q1.1_testprep_math_lm.png" alt="Test preparation course against mathematics score with least squares line">
+          <figcaption>Figure 1: Test preparation and mathematics score with least squares line.</figcaption>
+        </figure>
+        <p>The scatterplot uses a small jitter because the test preparation variable only has two values: none = 0 and completed = 1. The fitted line slopes upward, so students who completed the course had a higher sample mean mathematics score. The mean was <strong>64.65</strong> for students with no preparation course and <strong>69.18</strong> for those who completed it. However, the two groups still overlap a lot, so the visual relationship is not very strong.</p>
+      </div>
+    </div>
+
+    <div class="question">
+      <h3>1.2 Linear regression model</h3>
+      <p>The recoded variable is <code>prep_completed = 1</code> for completed and <code>prep_completed = 0</code> for none. The fitted least squares model is:</p>
+      <p><strong>Math_score_hat = 64.65 + 4.53(prep_completed)</strong></p>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Coefficient</th><th>Estimate</th><th>Std. Error</th><th>t value</th><th>p-value</th></tr></thead>
+          <tbody>
+            <tr><td>Intercept</td><td>64.652</td><td>1.182</td><td>54.68</td><td>&lt; 0.001</td></tr>
+            <tr><td>prep_completed</td><td>4.527</td><td>1.918</td><td>2.36</td><td>0.019</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="question">
+      <h3>1.3 Interpretation of the coefficients</h3>
+      <p>The intercept means that a student who did not complete the test preparation course is predicted to get about <strong>64.65</strong> for mathematics. The slope means that completing the preparation course is associated with an increase of about <strong>4.53 marks</strong> in the predicted mathematics score. In other words, the completed group performed better on average in this sample.</p>
+    </div>
+
+    <div class="question">
+      <h3>1.4 Hypothesis test for a relationship</h3>
+      <p><strong>Hypotheses:</strong> H0: beta1 = 0, meaning no linear relationship between course completion and mathematics score. HA: beta1 is not 0, meaning a relationship exists.</p>
+      <p>The p-value for the slope is <strong>0.019</strong>. Since this is less than 0.05, I reject H0. There is evidence in the sample that completing the test preparation course has a relationship with mathematics performance. The 95% confidence interval for the slope is <strong>(0.75, 8.31)</strong>, which is fully above zero.</p>
+    </div>
+
+    <div class="question">
+      <h3>1.5 Does the model predict mathematics score well?</h3>
+      <div class="warn">The model shows a statistically significant effect, but it is not a strong prediction model. The R-squared value is only <strong>0.022</strong>, so the preparation course explains about 2.2% of the variation in mathematics scores. The residual standard error is also fairly large at <strong>14.72</strong> marks.</div>
+      <p>My conclusion is that completing the course seems to improve the expected mathematics score slightly, but mathematics performance clearly depends on more than just this one variable.</p>
+    </div>
+  </div>
+
+  <div class="section-header">
+    <h2>Question 2 - Predicting Course Completion from Exam Scores</h2>
+    <div class="marks">Binary response: prep_completed | Predictors considered: mathematics, reading and writing scores</div>
+  </div>
+  <div class="section-body">
+    <div class="question">
+      <h3>2.1 Full logistic regression model</h3>
+      <p>The appropriate model is logistic regression because the response variable is binary. Let <strong>p</strong> be the probability that a student completed the test preparation course.</p>
+      <p><strong>log(p / (1 - p)) = -3.065 - 0.037(Math) - 0.076(Reading) + 0.150(Writing)</strong></p>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Predictor</th><th>Estimate</th><th>Std. Error</th><th>z value</th><th>p-value</th></tr></thead>
+          <tbody>
+            <tr><td>Intercept</td><td>-3.065</td><td>0.771</td><td>-3.973</td><td>&lt; 0.001</td></tr>
+            <tr><td>Math_score</td><td>-0.037</td><td>0.017</td><td>-2.222</td><td>0.026</td></tr>
+            <tr><td>Reading_score</td><td>-0.076</td><td>0.035</td><td>-2.160</td><td>0.031</td></tr>
+            <tr><td>Writing_score</td><td>0.150</td><td>0.035</td><td>4.269</td><td>&lt; 0.001</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="question">
+      <h3>2.2 Multicollinearity check</h3>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Check</th><th>Math</th><th>Reading</th><th>Writing</th><th>Comment</th></tr></thead>
+          <tbody>
+            <tr><td>Correlation with reading/writing</td><td>0.810 with reading; 0.799 with writing</td><td>0.956 with writing</td><td>0.956 with reading</td><td>Reading and writing are extremely similar.</td></tr>
+            <tr><td>VIF</td><td>2.965</td><td>12.399</td><td>11.803</td><td>Reading and writing are above 10, so multicollinearity is a problem.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>To fix this, I removed <strong>Reading_score</strong>. It is strongly correlated with Writing_score, and the reduced model keeps the interpretation more stable. After removing reading, the VIF values for mathematics and writing are both <strong>2.763</strong>, which is much more acceptable.</p>
+    </div>
+
+    <div class="question">
+      <h3>2.3 Final logistic regression model</h3>
+      <p>The final model is:</p>
+      <p><strong>log(p / (1 - p)) = -3.403 - 0.045(Math_score) + 0.086(Writing_score)</strong></p>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Predictor</th><th>Estimate</th><th>Std. Error</th><th>z value</th><th>p-value</th></tr></thead>
+          <tbody>
+            <tr><td>Intercept</td><td>-3.403</td><td>0.752</td><td>-4.525</td><td>&lt; 0.001</td></tr>
+            <tr><td>Math_score</td><td>-0.045</td><td>0.016</td><td>-2.815</td><td>0.0049</td></tr>
+            <tr><td>Writing_score</td><td>0.086</td><td>0.017</td><td>5.093</td><td>&lt; 0.001</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Both predictors in the final model are statistically significant at the 5% level.</p>
+    </div>
+
+    <div class="question">
+      <h3>2.4 Transformed coefficients</h3>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Term</th><th>Odds ratio</th><th>Interpretation</th></tr></thead>
+          <tbody>
+            <tr><td>Intercept</td><td>0.033</td><td>Baseline odds when both scores are zero. This is not very meaningful practically.</td></tr>
+            <tr><td>Math_score</td><td>0.956</td><td>Holding writing constant, each extra maths mark multiplies the odds of completion by 0.956, a decrease of about 4.4%.</td></tr>
+            <tr><td>Writing_score</td><td>1.089</td><td>Holding maths constant, each extra writing mark multiplies the odds of completion by 1.089, an increase of about 8.9%.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>The negative maths coefficient is a little awkward, so I would interpret it carefully. It is probably influenced by the fact that the exam scores are still related to each other, even after removing reading.</p>
+    </div>
+
+    <div class="question">
+      <h3>2.5 ROC curve, AUC and accuracy conclusion</h3>
+      <div class="two-col">
+        <figure>
+          <img src="output/A4_Q2.5_roc_curve.png" alt="ROC curve for the final logistic regression model">
+          <figcaption>Figure 2: ROC curve for the final logistic regression model.</figcaption>
+        </figure>
+        <div>
+          <p>The area under the ROC curve is <strong>AUC = 0.7085</strong>. This is better than random guessing, but it is not excellent.</p>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Actual / predicted</th><th>Predicted 0</th><th>Predicted 1</th></tr></thead>
+              <tbody>
+                <tr><td>Actual 0</td><td>133</td><td>22</td></tr>
+                <tr><td>Actual 1</td><td>51</td><td>44</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>Using a 0.50 cut-off, the model accuracy is <strong>70.8%</strong>, sensitivity is <strong>46.3%</strong>, and specificity is <strong>85.8%</strong>. So the model is better at identifying students who did not complete the course than those who did complete it. Overall it gives a moderate prediction, but it is not strong enough to rely on by itself.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

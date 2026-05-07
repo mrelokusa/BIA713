@@ -1,0 +1,141 @@
+BIA713 Assignment 4 Results
+===========================
+
+Sample information
+------------------
+Population size: 1000
+Sample size: 250
+Test preparation count:
+
+completed      none 
+       95       155 
+
+Math score summary by test preparation group:
+$completed
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  23.00   61.50   69.00   69.18   79.00  100.00 
+
+$none
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  18.00   55.50   65.00   64.65   75.00  100.00 
+
+
+
+null device 
+          1 
+Question 1 model: Math_score ~ prep_completed
+-----------------------------------------------
+
+Call:
+lm(formula = Math_score ~ prep_completed, data = sample_sp)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-46.652  -8.652  -0.179  10.348  35.348 
+
+Coefficients:
+               Estimate Std. Error t value Pr(>|t|)    
+(Intercept)      64.652      1.182   54.68   <2e-16 ***
+prep_completed    4.527      1.918    2.36    0.019 *  
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 14.72 on 248 degrees of freedom
+Multiple R-squared:  0.02197,	Adjusted R-squared:  0.01803 
+F-statistic: 5.571 on 1 and 248 DF,  p-value: 0.01903
+
+
+Confidence intervals for Question 1 coefficients:
+                    2.5 %    97.5 %
+(Intercept)    62.3228442 66.980382
+prep_completed  0.7495728  8.305096
+
+
+Question 2 full logistic model
+------------------------------
+
+Call:
+glm(formula = prep_completed ~ Math_score + Reading_score + Writing_score, 
+    family = binomial, data = sample_sp)
+
+Coefficients:
+              Estimate Std. Error z value Pr(>|z|)    
+(Intercept)   -3.06529    0.77145  -3.973 7.08e-05 ***
+Math_score    -0.03717    0.01673  -2.222   0.0263 *  
+Reading_score -0.07621    0.03528  -2.160   0.0307 *  
+Writing_score  0.15027    0.03520   4.269 1.97e-05 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 332.03  on 249  degrees of freedom
+Residual deviance: 291.71  on 246  degrees of freedom
+AIC: 299.71
+
+Number of Fisher Scoring iterations: 3
+
+
+Correlations among score predictors:
+              Math_score Reading_score Writing_score
+Math_score        1.0000        0.8096        0.7988
+Reading_score     0.8096        1.0000        0.9558
+Writing_score     0.7988        0.9558        1.0000
+
+VIF values for full model predictors:
+   Math_score Reading_score Writing_score 
+       2.9647       12.3986       11.8033 
+
+
+Question 2 final logistic model
+-------------------------------
+
+Call:
+glm(formula = prep_completed ~ Math_score + Writing_score, family = binomial, 
+    data = sample_sp)
+
+Coefficients:
+              Estimate Std. Error z value Pr(>|z|)    
+(Intercept)   -3.40263    0.75189  -4.525 6.03e-06 ***
+Math_score    -0.04535    0.01611  -2.815  0.00488 ** 
+Writing_score  0.08558    0.01680   5.093 3.52e-07 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 332.03  on 249  degrees of freedom
+Residual deviance: 296.50  on 247  degrees of freedom
+AIC: 302.5
+
+Number of Fisher Scoring iterations: 3
+
+
+VIF values for final model predictors:
+   Math_score Writing_score 
+       2.7631        2.7631 
+
+Transformed final model coefficients (odds ratios):
+  (Intercept)    Math_score Writing_score 
+       0.0333        0.9557        1.0894 
+
+95% confidence intervals for odds ratios:
+               2.5 % 97.5 %
+(Intercept)   0.0076 0.1453
+Math_score    0.9260 0.9863
+Writing_score 1.0541 1.1258
+
+
+null device 
+          1 
+ROC and classification information
+----------------------------------
+AUC: 0.7085
+Confusion matrix using a 0.50 cut-off:
+      Predicted
+Actual   0   1
+     0 133  22
+     1  51  44
+Accuracy: 0.7080
+Sensitivity: 0.4632
+Specificity: 0.8581
